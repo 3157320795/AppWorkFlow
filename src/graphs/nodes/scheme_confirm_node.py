@@ -4,6 +4,7 @@
 import json
 import os
 import logging
+from typing import Any, Dict, List
 from jinja2 import Template
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
@@ -11,6 +12,7 @@ from coze_coding_utils.runtime_ctx.context import Context
 from langchain_core.messages import SystemMessage, HumanMessage
 from coze_coding_dev_sdk import LLMClient
 from graphs.state import SchemeConfirmInput, SchemeConfirmOutput
+from utils.interaction_store import interaction_store
 
 logger = logging.getLogger(__name__)
 
@@ -27,8 +29,8 @@ def scheme_confirm_node(
     """
     ctx = runtime.context
     
-    # 检查是否启用交互模式
-    interactive_mode = os.getenv("ENABLE_INTERACTIVE_MODE", "false").lower() == "true"
+    # 检查是否启用交互模式（默认启用）
+    interactive_mode = os.getenv("ENABLE_INTERACTIVE_MODE", "true").lower() == "true"
     
     # 读取大模型配置
     cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH"), config['metadata']['llm_cfg'])
@@ -55,28 +57,54 @@ def handle_interactive_mode(
     """
     处理交互模式：展示方案并等待用户确认
     """
-    logger.info("启用交互模式，展示方案列表")
-    
-    # 展示方案摘要
-    for scheme in state.design_schemes:
-        logger.info(f"方案 {scheme.get('scheme_id')}: {scheme.get('scheme_name')}")
-        logger.info(f"  描述: {scheme.get('description')}")
-    
-    # 自动选择第一个方案（适用于自动化工作流）
-    confirmed_scheme_index = 0
-    confirmed_scheme = state.design_schemes[confirmed_scheme_index]
-    
-    logger.info(f"自动选择方案 {confirmed_scheme_index}")
-    
-    return SchemeConfirmOutput(
-        confirmed_scheme_index=confirmed_scheme_index,
-        confirmed_scheme=confirmed_scheme,
-        needs_modification=False,
-        modification_request="",
-        product_name=state.product_name,
-        user_interaction_type="automatic",
-        user_input_source="auto_selection"
-    )
+    run_id = getattr(ctx, "run_id", None) or "workflow"
+    logger.info("启用交互模式：run_id=%s，等待用户确认/修改方案", run_id)
+
+    schemes: List[Dict[str, Any]] = list(state.design_schemes or [])
+    if not schemes:
+        raise ValueError("交互模式下 design_schemes 为空，无法展示给用户确认")
+
+    # 将方案写入交互存储，供 Web 前端拉取
+    interaction_store.set_pending(run_id=run_id, product_name=state.product_name, schemes=schemes)
+
+    timeout_s = int(os.getenv("USER_INPUT_TIMEOUT", "300") or 300)
+    user_input = interaction_store.wait_user_input(run_id, timeout_s=timeout_s)
+    if not user_input:
+        interaction_store.clear(run_id)
+        raise TimeoutError(f"等待用户确认超时（{timeout_s}s），run_id={run_id}")
+
+    action = user_input.get("action")
+    if action == "confirm":
+        idx = int(user_input.get("scheme_index", 0))
+        if idx < 0 or idx >= len(schemes):
+            interaction_store.clear(run_id)
+            raise ValueError(f"scheme_index 越界: {idx}，schemes_len={len(schemes)}")
+        confirmed_scheme_index = idx
+        confirmed_scheme = schemes[confirmed_scheme_index]
+        interaction_store.clear(run_id)
+        logger.info("用户已确认方案：index=%s name=%s", confirmed_scheme_index, confirmed_scheme.get("scheme_name"))
+        return SchemeConfirmOutput(
+            confirmed_scheme_index=confirmed_scheme_index,
+            confirmed_scheme=confirmed_scheme,
+            needs_modification=False,
+            modification_request="",
+            product_name=state.product_name,
+            user_interaction_type="interactive",
+            user_input_source="real_user_input",
+        )
+
+    if action == "modify":
+        modification_request = str(user_input.get("modification_request", "") or "").strip()
+        if not modification_request:
+            interaction_store.clear(run_id)
+            raise ValueError("modification_request 为空")
+        logger.info("用户提交修改要求：%s", modification_request[:200])
+        out = handle_user_modification(state, modification_request, system_prompt, ctx)
+        interaction_store.clear(run_id)
+        return out
+
+    interaction_store.clear(run_id)
+    raise ValueError(f"未知用户动作: {action}")
 
 
 def handle_auto_mode(
@@ -86,6 +114,8 @@ def handle_auto_mode(
     """
     处理自动模式：直接选择第一个方案
     """
+    if not state.design_schemes:
+        raise ValueError("design_schemes 为空：上游 function_design 未产出可用的三套方案")
     confirmed_scheme_index = 0
     confirmed_scheme = state.design_schemes[confirmed_scheme_index]
     

@@ -22,6 +22,7 @@ from graphs.nodes.function_design_node import function_design_node
 from graphs.nodes.scheme_confirm_node import scheme_confirm_node
 from graphs.nodes.project_create_node import project_create_node
 from graphs.nodes.generate_screens_html_node import generate_screens_html_node
+from graphs.nodes.recover_stitch_assets_node import recover_stitch_assets_node
 from graphs.nodes.file_download_node import file_download_node
 from graphs.nodes.git_branch_switch_node import git_branch_switch_node
 from graphs.nodes.uniapp_page_generate_node import uniapp_page_generate_node
@@ -41,16 +42,37 @@ def should_skip_to_git(state: ShouldUseDefaultResource) -> str:
         return "生成Screens和HTML"
 
 
-def should_skip_git_from_generate(state: ShouldUseDefaultResource) -> str:
+def should_skip_git_from_generate(state) -> str:
     """
     title: Screens生成后是否跳过到Git分支切换
-    desc: 判断Screens和HTML生成是否异常，如果异常则直接跳到Git分支切换
+    desc: 判断Screens和HTML生成是否异常或早期断开，如果是则进入交互恢复资源
+    """
+    # 检查是否发生错误或早期断开
+    error_occurred = getattr(state, 'error_occurred', False)
+    wait_before_recover = getattr(state, 'wait_before_recover', False)
+    early_disconnect = getattr(state, 'early_disconnect', False)
+    
+    # DEBUG 日志：打印所有相关字段
+    logger.info("[DEBUG] should_skip_git_from_generate 检查: error_occurred=%s, wait_before_recover=%s, early_disconnect=%s", 
+                error_occurred, wait_before_recover, early_disconnect)
+    logger.info("[DEBUG] state 类型: %s, 字段: %s", type(state).__name__, dir(state))
+    
+    if error_occurred or wait_before_recover or early_disconnect:
+        logger.info("Screens和HTML生成失败、超时或早期断开，进入交互恢复资源")
+        return "交互恢复资源"
+    else:
+        logger.info("Screens和HTML生成正常，使用生成资源")
+        return "使用生成资源"
+
+
+def should_skip_git_from_recover(state: ShouldUseDefaultResource) -> str:
+    """
+    title: 恢复资源后是否跳过到Git分支切换
+    desc: 如果交互恢复仍失败，则继续走 Git 分支切换；否则继续使用生成资源下载
     """
     if state.error_occurred:
-        logger.info("Screens和HTML生成失败或超时，直接跳转到Git分支切换")
         return "直接切换Git分支"
-    else:
-        return "使用生成资源"
+    return "使用生成资源"
 
 
 # ==================== 结果整理节点 ====================
@@ -113,6 +135,13 @@ builder.add_node(
     metadata={"type": "task"}
 )
 
+# 节点4.1：生成失败后的交互恢复
+builder.add_node(
+    "recover_stitch_assets",
+    recover_stitch_assets_node,
+    metadata={"type": "task"}
+)
+
 # 节点5：文件下载
 builder.add_node(
     "file_download",
@@ -165,8 +194,18 @@ builder.add_conditional_edges(
     source="generate_screens_html",
     path=should_skip_git_from_generate,
     path_map={
-        "直接切换Git分支": "git_branch_switch",
+        "交互恢复资源": "recover_stitch_assets",
         "使用生成资源": "file_download"
+    }
+)
+
+# 恢复节点后：成功则继续 file_download，失败则走 git_branch_switch
+builder.add_conditional_edges(
+    source="recover_stitch_assets",
+    path=should_skip_git_from_recover,
+    path_map={
+        "直接切换Git分支": "git_branch_switch",
+        "使用生成资源": "file_download",
     }
 )
 

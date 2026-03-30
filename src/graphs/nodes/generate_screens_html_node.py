@@ -1,108 +1,18 @@
 """
-Screens和HTML生成节点：将产品功能发送至项目生成对应的screens及html，若异常则使用默认资源
+Screens和HTML生成节点：通过 Stitch MCP 的 generate_screen_from_text + list_screens 获取资源 URL
 """
-import os
-import requests
 import logging
-import threading
+import os
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 from graphs.state import GenerateScreensHtmlInput, GenerateScreensHtmlOutput
+from graphs.stitch_mcp import generate_screens_html_via_mcp, run_with_timeout, TimeoutException, EarlyDisconnectException
 
 logger = logging.getLogger(__name__)
 
-
-# MCP 请求配置
-MCP_URL = "https://stitch.googleapis.com/mcp"
-MCP_HEADERS = {
-    "X-Goog-Api-Key": "AQ.Ab8RN6J3ydkw2EWwp-XtY9TPwwt8KooPdw2_Z0G0DL94tymgZA",
-    "Content-Type": "application/json"
-}
-
-
-# 超时异常
-class TimeoutError(Exception):
-    pass
-
-
-class TimeoutException(Exception):
-    """超时异常"""
-    pass
-
-
-def run_with_timeout(func, args=(), kwargs=None, timeout=60):
-    """在子线程中运行函数，支持超时"""
-    if kwargs is None:
-        kwargs = {}
-    
-    result = None
-    exception = None
-    
-    def worker():
-        nonlocal result, exception
-        try:
-            result = func(*args, **kwargs)
-        except Exception as e:
-            exception = e
-    
-    thread = threading.Thread(target=worker)
-    thread.start()
-    thread.join(timeout=timeout)
-    
-    if thread.is_alive():
-        # 线程仍在运行，表示超时
-        raise TimeoutException(f"操作超时（{timeout}秒）")
-    
-    if exception is not None:
-        raise exception
-    
-    return result
-
-
-def generate_screens_html_via_mcp(project_id, confirmed_scheme):
-    """通过MCP生成Screens和HTML（用于在子线程中执行）"""
-    payload = {
-        "method": "projects.generate_screens_html",
-        "params": {
-            "project_id": project_id,
-            "scheme": confirmed_scheme,
-            "generate_screens": True,
-            "generate_html": True
-        }
-    }
-    
-    logger.info(f"正在调用 MCP 生成 Screens 和 HTML: {project_id}")
-    
-    # 调用 MCP API
-    response = requests.post(
-        MCP_URL,
-        json=payload,
-        headers=MCP_HEADERS,
-        timeout=60
-    )
-    
-    # 检查响应状态
-    if response.status_code == 200:
-        result = response.json()
-        logger.info(f"MCP 响应: {result}")
-        
-        screens_url = result.get("screens_url", "")
-        html_url = result.get("html_url", "")
-        
-        if screens_url and html_url:
-            return {
-                "screens_generated": True,
-                "html_generated": True,
-                "screens_url": screens_url,
-                "html_url": html_url
-            }
-        else:
-            raise Exception("MCP API 返回成功但缺少必要的 URL")
-    else:
-        logger.error(f"MCP API 调用失败: HTTP {response.status_code}")
-        logger.error(f"响应内容: {response.text}")
-        raise Exception(f"MCP API 调用失败: HTTP {response.status_code}")
+# create_project + 生成 + 轮询 list_screens，默认可达 10 分钟以上
+_GENERATE_NODE_TIMEOUT = int(os.getenv("STITCH_GENERATE_NODE_TIMEOUT_SECONDS", "720"))
 
 
 def generate_screens_html_node(
@@ -112,12 +22,12 @@ def generate_screens_html_node(
 ) -> GenerateScreensHtmlOutput:
     """
     title: Screens和HTML生成
-    desc: 将产品功能发送至项目生成对应的screens及html，超时（1分钟）或异常则使用默认资源
+    desc: 将产品功能发送至项目生成对应的screens及html，超时或异常则使用默认资源
     integrations: stitch mcp
     """
     ctx = runtime.context
+    run_id = getattr(ctx, "run_id", None) or "workflow"
 
-    # 如果上游已经发生异常或标记使用默认资源，直接返回默认本地路径
     if state.error_occurred or state.use_default_resource:
         logger.warning("上游发生异常或标记使用默认资源，直接使用默认本地路径")
         return GenerateScreensHtmlOutput(
@@ -128,7 +38,6 @@ def generate_screens_html_node(
             error_occurred=True
         )
 
-    # 只有当project_id存在且没有异常时，才调用MCP生成
     if not state.project_id:
         logger.warning("project_id为空，使用默认资源")
         return GenerateScreensHtmlOutput(
@@ -140,26 +49,52 @@ def generate_screens_html_node(
         )
 
     try:
-        # 使用新的超时机制（60秒）
         result_dict: dict = run_with_timeout(
             generate_screens_html_via_mcp,
-            args=(state.project_id, state.confirmed_scheme),
-            timeout=60
+            args=(state.project_id, state.confirmed_scheme, run_id),
+            timeout=max(60, _GENERATE_NODE_TIMEOUT)
         )
-        
         if result_dict is None:
-            raise Exception("run_with_timeout returned None unexpectedly")
-        
+            raise RuntimeError("run_with_timeout returned None unexpectedly")
+        if not isinstance(result_dict, dict):
+            raise RuntimeError(f"generate_screens_html 返回类型异常: {type(result_dict)}")
+
+        screens_generated = bool(True)
+        html_generated = bool(result_dict.get("html_generated", False))
+        screens_url = str(result_dict.get("screens_url", "") or "").strip()
+        html_url = str(result_dict.get("html_url", "") or "").strip()
+
+        # 参考 test.py 中 MCP 调用：工具返回成功后，必须校验关键结果字段是否齐全。
+        if screens_generated and not screens_url:
+            raise RuntimeError("generate_screens_html 返回 screens_generated=True 但缺少 screens_url")
+        if html_generated and not html_url:
+            raise RuntimeError("generate_screens_html 返回 html_generated=True 但缺少 html_url")
+        if not (screens_generated and html_generated):
+            raise RuntimeError(
+                f"generate_screens_html 未完整生成资源: {result_dict}"
+            )
+
         return GenerateScreensHtmlOutput(
-            screens_generated=result_dict.get("screens_generated", False),
-            html_generated=result_dict.get("html_generated", False),
-            screens_url=result_dict.get("screens_url", ""),
-            html_url=result_dict.get("html_url", ""),
+            screens_generated=screens_generated,
+            html_generated=html_generated,
+            screens_url=screens_url,
+            html_url=html_url,
             error_occurred=False
         )
-            
+
+    except EarlyDisconnectException as e:
+        logger.warning("Screens和HTML生成早期断开（未满5分钟）: %s，标记等待5分钟后恢复", e)
+        return GenerateScreensHtmlOutput(
+            screens_generated=False,
+            html_generated=False,
+            screens_local_path=state.screens_local_path,
+            html_local_path=state.html_local_path,
+            error_occurred=False,  # 不是错误，是特殊状态
+            wait_before_recover=True,
+            early_disconnect=True
+        )
     except TimeoutException as e:
-        logger.warning(f"Screens和HTML生成超时: {e}，使用默认资源")
+        logger.warning("Screens和HTML生成超时: %s，使用默认资源", e)
         return GenerateScreensHtmlOutput(
             screens_generated=False,
             html_generated=False,
@@ -168,8 +103,7 @@ def generate_screens_html_node(
             error_occurred=True
         )
     except Exception as e:
-        # 其他异常，使用默认资源
-        logger.error(f"生成Screens和HTML失败: {e}，使用默认资源", exc_info=True)
+        logger.error("生成Screens和HTML失败: %s，使用默认资源", e, exc_info=True)
         return GenerateScreensHtmlOutput(
             screens_generated=False,
             html_generated=False,

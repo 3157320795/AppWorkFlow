@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AppWorkFlow — 全自动工作流</title>
+  <link rel="stylesheet" href="/workflow-ui/css/dashboard.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◈</span>
+      <h1>AppWorkFlow — 全自动 UniApp 生成</h1>
+    </div>
+    <div class="status-bar">
+      <span class="status-item" id="workflowStatus">就绪</span>
+      <span class="hint">全自动流：<code>x-workflow-stream-mode: auto</code></span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- 左侧面板：运行参数 -->
+    <section class="panel form-panel">
+      <h2>🚀 运行参数</h2>
+      <div class="form-group">
+        <label for="productName">产品名称</label>
+        <input id="productName" type="text" value="猪猪来财" autocomplete="off" placeholder="例如：猪猪来财" />
+      </div>
+      <div class="form-group">
+        <label for="productGroup">产品分组</label>
+        <input id="productGroup" type="text" value="七组" autocomplete="off" placeholder="例如：七组" />
+      </div>
+      <div class="actions">
+        <button type="button" id="btnRun" class="primary">
+          <span class="btn-icon">▶</span> 开始运行
+        </button>
+        <button type="button" id="btnCancel" class="ghost" disabled>
+          <span class="btn-icon">■</span> 取消
+        </button>
+      </div>
+      <div class="run-meta">
+        <div class="meta-row">
+          <span class="meta-label">run_id:</span>
+          <code id="runIdDisplay">—</code>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">总耗时:</span>
+          <strong id="totalMs">—</strong>
+        </div>
+        <div class="meta-row" id="currentNodeRow" style="display: none;">
+          <span class="meta-label">当前节点:</span>
+          <span id="currentNode" class="node-status">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 中间面板：节点详情与交互 -->
+    <section class="panel detail-panel">
+      <h2>📋 节点详情</h2>
+      <div class="detail-header">
+        <p class="detail-node" id="detailNode">点击节点查看详细信息</p>
+      </div>
+
+      <!-- 交互区域 -->
+      <div id="interactionBox" class="interaction-box" hidden>
+        <div class="interaction-head">
+          <div class="interaction-title">🎯 方案确认</div>
+          <div class="interaction-sub">请选择一套设计方案，或填写修改要求</div>
+        </div>
+
+        <!-- 全自动恢复状态显示 -->
+        <div id="autoRecoverBox" class="auto-recover" hidden>
+          <div class="interaction-title">自动恢复 Stitch 资源</div>
+          <div class="recover-status-panel">
+            <div class="recover-phase" id="recoverPhase">等待服务器完成生成...</div>
+            <div class="recover-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" id="recoverProgressBar" style="width: 0%"></div>
+              </div>
+              <div class="progress-stats" id="recoverStats">准备中...</div>
+            </div>
+            <div class="recover-logs" id="recoverLogs"></div>
+          </div>
+        </div>
+
+        <!-- 方案列表 -->
+        <div id="schemeList" class="scheme-list"></div>
+
+        <!-- 修改要求 -->
+        <div class="modify-box">
+          <label class="modify-label" for="modifyText">
+            <span class="label-icon">✏️</span> 修改要求（可选）
+          </label>
+          <textarea id="modifyText" class="modify-text" rows="3" placeholder="例如：把页面数控制在 4 个；首页增加数据看板；统计页增加筛选条件..."></textarea>
+          <div class="modify-actions">
+            <button type="button" id="btnSubmitModify" class="ghost">
+              <span class="btn-icon">↵</span> 提交修改
+            </button>
+          </div>
+        </div>
+
+        <p class="modify-hint" id="interactionHint"></p>
+      </div>
+
+      <!-- 节点详情输出 -->
+      <div class="detail-content" id="detailJson">
+        <div class="empty-state">
+          <span class="empty-icon">📋</span>
+          <p>点击节点查看详细信息</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右侧面板：节点视图 -->
+    <section class="panel timeline-panel">
+      <div class="panel-header">
+        <h2>执行视图</h2>
+        <div class="tabs" role="tablist" aria-label="视图切换">
+          <button type="button" id="tabGraph" class="tab active" role="tab" aria-selected="true">
+            流程图
+          </button>
+          <button type="button" id="tabTimeline" class="tab" role="tab" aria-selected="false">
+            时间线
+          </button>
+          <button type="button" id="tabLogs" class="tab" role="tab" aria-selected="false">
+            日志
+          </button>
+        </div>
+      </div>
+
+      <!-- 流程图视图 -->
+      <div id="graphWrap" class="graph-wrap">
+        <div class="graph-canvas" id="graphCanvas"></div>
+      </div>
+
+      <!-- 时间线视图 -->
+      <div id="timeline" class="timeline timeline-hidden" aria-hidden="true"></div>
+
+      <!-- 日志视图 -->
+      <div id="logs" class="logs logs-hidden" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <script src="/workflow-ui/js/dashboard.js" type="module"></script>
+</body>
+</html>

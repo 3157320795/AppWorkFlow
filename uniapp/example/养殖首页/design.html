@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PigTrack Pro - 收益统计</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700;800&amp;family=Public+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface-variant": "#40493d",
+                        "primary": "#0d631b",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#a5c8ff",
+                        "surface-dim": "#dadada",
+                        "inverse-on-surface": "#f1f1f1",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#54a0fe",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#a3f69c",
+                        "tertiary-container": "#d02d2d",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed-variant": "#930010",
+                        "on-secondary-fixed": "#001c3a",
+                        "on-primary-container": "#cbffc2",
+                        "secondary": "#005faf",
+                        "on-background": "#1a1c1c",
+                        "on-primary-fixed-variant": "#005312",
+                        "tertiary": "#ac0c18",
+                        "surface-bright": "#f9f9f9",
+                        "primary-fixed-dim": "#88d982",
+                        "tertiary-fixed": "#ffdad6",
+                        "surface-container-low": "#f3f3f3",
+                        "surface-container": "#eeeeee",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#2e7d32",
+                        "outline": "#707a6c",
+                        "secondary-fixed": "#d4e3ff",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-secondary-fixed-variant": "#004786",
+                        "on-tertiary-fixed": "#410003",
+                        "on-primary-fixed": "#002204",
+                        "inverse-surface": "#2f3131",
+                        "outline-variant": "#bfcaba",
+                        "background": "#f9f9f9",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#003567",
+                        "surface-variant": "#e2e2e2",
+                        "inverse-primary": "#88d982",
+                        "on-surface": "#1a1c1c",
+                        "surface-tint": "#1b6d24",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#ffedeb",
+                        "on-error": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Work Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Public Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Work Sans', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-28">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-[#f9f9f9] dark:bg-[#1a1c1c] flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Professional portrait of a modern small-scale farmer wearing a denim shirt in a sunlit agricultural setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsnoJ09j_1UZBJqEnu2_rqGVjl9pM1pUFVPWsKv4tBhMVzkBpCaT1NT7WtVyhxR3b692uLscnLeLqIAijw4NfaR0bEFw6qTw5PYedKr3PXCnG1NM7EaqJIQA3DIjh6NBJusvNoTkEgC12raErJqEOg0bLw3BoGvQHGppi6zOclbutgVi3fjlF1_lrFD9vqZZOaMpn-qKACB1IzIm1l8fBxjNJXHhnXldCPaRn-gAsrC_JFHPE4Fbp_a48tcwmEbFwHGExlVff6"/>
+</div>
+<span class="font-['Work_Sans'] font-bold text-xl tracking-tight text-[#0d631b] dark:text-[#a3f69c]">收益统计</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#0d631b] dark:text-[#a3f69c] hover:opacity-80 transition-opacity active:transition-transform scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="px-6 space-y-8 max-w-5xl mx-auto">
+<!-- Time Filter Chips -->
+<section class="flex gap-3 overflow-x-auto py-2 no-scrollbar">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm shadow-sm">本周</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-colors">本月</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-colors">本季度</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-colors flex items-center gap-1">
+<span>自定义</span>
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+</button>
+</section>
+<!-- Summary Metrics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-primary bg-gradient-to-br from-primary to-primary-container p-6 rounded-3xl text-on-primary shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<p class="text-sm opacity-90 mb-1">本期净利润</p>
+<h2 class="text-4xl font-extrabold tracking-tight">¥128,450</h2>
+<div class="mt-4 flex items-center gap-2 bg-white/20 w-fit px-3 py-1 rounded-full text-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>较上月 +12.5%</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-9xl">monetization_on</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-sm border border-outline-variant/10">
+<p class="text-sm text-on-surface-variant mb-1">总收入</p>
+<h2 class="text-3xl font-bold text-on-surface">¥352,000</h2>
+<div class="mt-6 flex gap-2">
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-3/4 rounded-full"></div>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">已达成销售目标的 75%</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-sm border border-outline-variant/10">
+<p class="text-sm text-on-surface-variant mb-1">总支出</p>
+<h2 class="text-3xl font-bold text-on-surface">¥223,550</h2>
+<div class="mt-4 grid grid-cols-2 gap-2">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant uppercase">饲料占比</span>
+<span class="text-sm font-semibold text-tertiary">64%</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant uppercase">防疫占比</span>
+<span class="text-sm font-semibold text-secondary">18%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Charts Area: Asymmetric Layout -->
+<section class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+<!-- Revenue Trend Line Chart -->
+<div class="lg:col-span-3 bg-surface-container-lowest p-8 rounded-3xl shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-lg font-bold">营收趋势 (月度)</h3>
+<div class="flex gap-4 text-xs font-medium">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span>收入</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-tertiary-fixed-dim"></span>
+<span>支出</span>
+</div>
+</div>
+</div>
+<!-- Mock Chart Visualization -->
+<div class="h-64 flex items-end justify-between gap-4 px-2">
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full flex flex-col gap-1 items-center">
+<div class="w-full bg-primary/20 rounded-t-lg h-24 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg h-16 transition-all group-hover:h-20"></div>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant">4月</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full flex flex-col gap-1 items-center">
+<div class="w-full bg-primary/20 rounded-t-lg h-32 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg h-24 transition-all group-hover:h-28"></div>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant">5月</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full flex flex-col gap-1 items-center">
+<div class="w-full bg-primary/20 rounded-t-lg h-40 relative group">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg h-36 transition-all group-hover:h-38"></div>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant">6月</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full flex flex-col gap-1 items-center">
+<div class="w-full bg-primary/20 rounded-t-lg h-52 relative group border-2 border-primary border-b-0 shadow-lg">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg h-44"></div>
+</div>
+</div>
+<span class="text-xs font-bold text-primary">7月</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full flex flex-col gap-1 items-center opacity-40">
+<div class="w-full bg-surface-container rounded-t-lg h-32"></div>
+</div>
+<span class="text-xs text-on-surface-variant">8月</span>
+</div>
+</div>
+</div>
+<!-- Cost Composition Pie Chart -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-3xl shadow-sm flex flex-col items-center">
+<h3 class="text-lg font-bold self-start mb-8">支出构成</h3>
+<div class="relative w-48 h-48 mb-8">
+<!-- SVG Donut Chart Mockup -->
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#eeeeee" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#0d631b" stroke-dasharray="64 36" stroke-dashoffset="0" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#005faf" stroke-dasharray="18 82" stroke-dashoffset="-64" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#ac0c18" stroke-dasharray="12 88" stroke-dashoffset="-82" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#bfcaba" stroke-dasharray="6 94" stroke-dashoffset="-94" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold">¥223k</span>
+<span class="text-[10px] text-on-surface-variant">总成本</span>
+</div>
+</div>
+<ul class="w-full space-y-3">
+<li class="flex justify-between items-center text-sm">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="text-on-surface-variant">饲料费用</span>
+</div>
+<span class="font-semibold">64%</span>
+</li>
+<li class="flex justify-between items-center text-sm">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="text-on-surface-variant">疫苗防疫</span>
+</div>
+<span class="font-semibold">18%</span>
+</li>
+<li class="flex justify-between items-center text-sm">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span class="text-on-surface-variant">维护成本</span>
+</div>
+<span class="font-semibold">12%</span>
+</li>
+<li class="flex justify-between items-center text-sm">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
+<span class="text-on-surface-variant">人工支出</span>
+</div>
+<span class="font-semibold">6%</span>
+</li>
+</ul>
+</div>
+</section>
+<!-- Details Area -->
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<h3 class="text-xl font-bold">批次详情</h3>
+<button class="text-primary text-sm font-semibold flex items-center gap-1">
+                    查看全部 <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+<!-- Predicted Batches (Active) -->
+<div class="bg-primary/5 border border-primary/10 rounded-3xl p-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<span class="px-3 py-1 bg-primary text-on-primary text-[10px] font-bold rounded-full">预测收益</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="flex-shrink-0 w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl text-primary" data-weight="fill">analytics</span>
+</div>
+<div class="flex-grow">
+<h4 class="font-bold text-lg">批次 #2023-B04 (当前育肥)</h4>
+<p class="text-sm text-on-surface-variant">预计出栏时间: 2023年10月15日 • 240头</p>
+</div>
+<div class="md:text-right">
+<p class="text-xs text-on-surface-variant mb-1">预估净利润</p>
+<p class="text-2xl font-bold text-primary">¥86,400</p>
+</div>
+</div>
+</div>
+<!-- Completed Batches List -->
+<div class="space-y-4">
+<div class="bg-surface-container-low p-6 rounded-3xl flex flex-col md:flex-row md:items-center gap-4 hover:bg-surface-container transition-colors">
+<div class="flex-grow flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">check_circle</span>
+</div>
+<div>
+<h5 class="font-bold">批次 #2023-B03 (已出栏)</h5>
+<span class="text-xs text-on-surface-variant">2023年6月20日结案 • 185头</span>
+</div>
+</div>
+<div class="flex items-center gap-8 md:text-right">
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase mb-0.5">实际利润</p>
+<p class="font-bold">¥54,200</p>
+</div>
+<div class="text-primary-container">
+<span class="material-symbols-outlined">description</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-3xl flex flex-col md:flex-row md:items-center gap-4 hover:bg-surface-container transition-colors">
+<div class="flex-grow flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">check_circle</span>
+</div>
+<div>
+<h5 class="font-bold">批次 #2023-B02 (已出栏)</h5>
+<span class="text-xs text-on-surface-variant">2023年3月12日结案 • 210头</span>
+</div>
+</div>
+<div class="flex items-center gap-8 md:text-right">
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase mb-0.5">实际利润</p>
+<p class="font-bold">¥61,850</p>
+</div>
+<div class="text-primary-container">
+<span class="material-symbols-outlined">description</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-white dark:bg-[#1a1c1c] z-50 rounded-t-3xl shadow-[0_-8px_24px_rgba(26,28,28,0.06)] border-t border-[#bfcaba]/20">
+<a class="flex flex-col items-center justify-center text-[#1a1c1c]/60 dark:text-[#e2e2e2]/60 px-4 py-2 hover:bg-[#f3f3f3] dark:hover:bg-[#2e2e2e] rounded-2xl transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Public_Sans'] text-[12px] font-medium">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1a1c1c]/60 dark:text-[#e2e2e2]/60 px-4 py-2 hover:bg-[#f3f3f3] dark:hover:bg-[#2e2e2e] rounded-2xl transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">pets</span>
+<span class="font-['Public_Sans'] text-[12px] font-medium">Herd</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#e2e2e2] dark:bg-[#2e7d32]/20 text-[#0d631b] dark:text-[#a3f69c] rounded-2xl px-4 py-2 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-['Public_Sans'] text-[12px] font-medium">Finance</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1a1c1c]/60 dark:text-[#e2e2e2]/60 px-4 py-2 hover:bg-[#f3f3f3] dark:hover:bg-[#2e2e2e] rounded-2xl transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Public_Sans'] text-[12px] font-medium">Settings</span>
+</a>
+</nav>
+</body></html>

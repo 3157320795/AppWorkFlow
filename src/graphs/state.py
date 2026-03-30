@@ -50,6 +50,10 @@ class GlobalState(BaseModel):
     error_occurred: bool = Field(default=False, description="是否发生异常")
     error_message: str = Field(default="", description="错误信息")
     
+    # 早期断开恢复标记
+    wait_before_recover: bool = Field(default=False, description="是否需要等待5分钟后进入恢复节点")
+    early_disconnect: bool = Field(default=False, description="是否是早期断开（未满5分钟）")
+    
     # 默认资源（本地文件路径，用于异常情况）
     default_html_path: str = Field(default="uniapp/example/design.html", description="默认HTML本地路径")
     default_screen_path: str = Field(default="uniapp/example/screen.png", description="默认Screen本地路径")
@@ -148,6 +152,8 @@ class GenerateScreensHtmlOutput(BaseModel):
     screens_local_path: str = Field(default="", description="Screens本地路径（使用默认资源时）")
     html_local_path: str = Field(default="", description="HTML本地路径（使用默认资源时）")
     error_occurred: bool = Field(default=False, description="是否发生异常")
+    wait_before_recover: bool = Field(default=False, description="是否需要等待5分钟后进入恢复节点")
+    early_disconnect: bool = Field(default=False, description="是否是早期断开（未满5分钟）")
 
 
 # 节点5：文件下载节点

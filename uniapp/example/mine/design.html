@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700;800&amp;family=Public_Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#40493d",
+              "primary": "#0d631b",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#a5c8ff",
+              "surface-dim": "#dadada",
+              "inverse-on-surface": "#f1f1f1",
+              "surface-container-highest": "#e2e2e2",
+              "on-primary": "#ffffff",
+              "secondary-container": "#54a0fe",
+              "error-container": "#ffdad6",
+              "primary-fixed": "#a3f69c",
+              "tertiary-container": "#d02d2d",
+              "on-tertiary": "#ffffff",
+              "surface": "#f9f9f9",
+              "surface-container-high": "#e8e8e8",
+              "on-tertiary-fixed-variant": "#930010",
+              "on-secondary-fixed": "#001c3a",
+              "on-primary-container": "#cbffc2",
+              "secondary": "#005faf",
+              "on-background": "#1a1c1c",
+              "on-primary-fixed-variant": "#005312",
+              "tertiary": "#ac0c18",
+              "surface-bright": "#f9f9f9",
+              "primary-fixed-dim": "#88d982",
+              "tertiary-fixed": "#ffdad6",
+              "surface-container-low": "#f3f3f3",
+              "surface-container": "#eeeeee",
+              "on-secondary": "#ffffff",
+              "primary-container": "#2e7d32",
+              "outline": "#707a6c",
+              "secondary-fixed": "#d4e3ff",
+              "tertiary-fixed-dim": "#ffb3ac",
+              "on-secondary-fixed-variant": "#004786",
+              "on-tertiary-fixed": "#410003",
+              "on-primary-fixed": "#002204",
+              "inverse-surface": "#2f3131",
+              "outline-variant": "#bfcaba",
+              "background": "#f9f9f9",
+              "error": "#ba1a1a",
+              "on-secondary-container": "#003567",
+              "surface-variant": "#e2e2e2",
+              "inverse-primary": "#88d982",
+              "on-surface": "#1a1c1c",
+              "surface-tint": "#1b6d24",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-container": "#ffedeb",
+              "on-error": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Work Sans"],
+              "body": ["Public Sans"],
+              "label": ["Public Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Public Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Work Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-[#f9f9f9] dark:bg-[#1a1c1c]">
+<div class="flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Close-up portrait of a professional modern farmer wearing a cap, soft natural light, blurred agricultural background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwpnM4PtVGKggNHCrJVrnloMx-L7Imxe_o7baNmArR3x4jxg0FHO-I9RDJrUnI4otVe--oOkOqMG7GDVW9nRSUmHfsD39pHpKPxxboVJnbFc5svPtcXJmUHvlpdr39mZ0G_LlMUsA2ExxuSV22iE0--2hFawqrIrifaphzj1XOA0A2-fS_Mzi1W6Z3ays2WWDNoqxQ4KuARaCYAT0QoUMNUZNnB4d8ZPP-McfCtCHiALuyuLZLasBH_WOyfpSNmrf3jMl9j3eu"/>
+<h1 class="text-[#0d631b] dark:text-[#a3f69c] font-['Work_Sans'] font-bold text-xl tracking-tight">PigTrack Pro</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#0d631b] dark:text-[#a3f69c] hover:opacity-80 transition-opacity active:transition-transform scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<main class="px-6 max-w-5xl mx-auto">
+<!-- Page Header & Search Section -->
+<section class="mt-6 mb-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="text-3xl font-bold text-on-surface mb-2 tracking-tight">猪只管理</h2>
+<p class="text-on-surface-variant text-sm">监控您的猪场健康、体重和生长阶段</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+<div class="relative flex-grow">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary text-on-surface placeholder-outline text-sm" placeholder="搜索耳标或品种..." type="text"/>
+</div>
+<button class="bg-surface-container-highest px-6 py-3 rounded-full flex items-center justify-center gap-2 text-on-surface font-medium hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">tune</span>
+<span>筛选</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Filters Grid (Visual Asymmetry) -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col gap-1">
+<span class="text-xs text-on-surface-variant font-semibold">栏位</span>
+<span class="text-lg font-bold text-primary">全部栏位</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col gap-1 border-b-2 border-primary">
+<span class="text-xs text-on-surface-variant font-semibold">生长阶段</span>
+<span class="text-lg font-bold text-primary">育肥期</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col gap-1">
+<span class="text-xs text-on-surface-variant font-semibold">健康状态</span>
+<span class="text-lg font-bold text-on-surface">正常状态</span>
+</div>
+<div class="bg-primary p-4 rounded-xl flex flex-col gap-1 shadow-lg">
+<span class="text-xs text-on-primary/80 font-semibold">当前存栏</span>
+<span class="text-lg font-bold text-on-primary">1,248 头</span>
+</div>
+</section>
+<!-- Pig Management List View (Bento/Premium Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Pig Entry 1 -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl flex gap-5 hover:bg-white transition-all shadow-sm cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 w-2 h-full bg-primary-fixed"></div>
+<div class="w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Clean and healthy Duroc pig in a well-lit modern farming facility, soft morning sunlight, sharp focus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD87OpM1pdb3qMaR2cIfuwA-b1xXWT0v3XoT2dO7BiVE3GYA8q07jQlpr7eLyqHEtWgb6B2n9MjKlZPsFOsYYO_jNnugAWOgn6A6fFEPxcHvfT3BbZfFQhL2GhwhCRAKjts-Hw5JkuLxJVuwvaKfkgz71H6q1IMTuxhiwK8gKms5awMsA7mLVTUzxG4-OLMJrHdxRF51Oa9oTiGm2VtuV9uPjWfhbcO2V5cTcQPFJ-UegMjmqbeAFOGkQuwkirM-BNkJnH2ntt7"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline font-bold mb-1">ID: #DX-9021</p>
+<h3 class="text-lg font-bold text-on-surface">杜洛克 (Duroc)</h3>
+</div>
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded-full text-[10px] font-bold">健康</span>
+</div>
+<div class="flex items-center gap-6 mt-4">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant">天数</span>
+<span class="text-sm font-bold">90 天</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant/20 pl-6">
+<span class="text-xs text-on-surface-variant">体重</span>
+<span class="text-sm font-bold">45.2 kg</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant/20 pl-6">
+<span class="text-xs text-on-surface-variant">栏位</span>
+<span class="text-sm font-bold">B-04</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pig Entry 2 -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl flex gap-5 hover:bg-white transition-all shadow-sm cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 w-2 h-full bg-tertiary-container"></div>
+<div class="w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Spotted pig breed standing in clean straw bedding, high-end agricultural photography style, cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXeGBLapayPTOCO_7Z7RkK9QFaORvwb5SpWMvP6Dk9vdDK6XBR-gFZFpUuhlxP3_IUgaK65jMF1wOtBmlGZLm4PfaI_SC7jJBrA5bFvUYD2YWR9FOy0J_HeFKcxZxF_X-wCOWrRdVHErfliaBBVGdu5hWAmqUzY_MQfoJrp3A5ebTGsl8-jdV3ai0c4N1oW42jtHgPXQ-lMc4DtCjT1DxDDhyeWRN6HFyNHnLPbj9Tfp1XuGwQWgNW8Io-opNo2uTgSNneaCkz"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline font-bold mb-1">ID: #LW-7720</p>
+<h3 class="text-lg font-bold text-on-surface">大白猪 (Landrace)</h3>
+</div>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full text-[10px] font-bold">生病</span>
+</div>
+<div class="flex items-center gap-6 mt-4">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant">天数</span>
+<span class="text-sm font-bold">112 天</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant/20 pl-6">
+<span class="text-xs text-on-surface-variant">体重</span>
+<span class="text-sm font-bold">68.5 kg</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant/20 pl-6">
+<span class="text-xs text-on-surface-variant">栏位</span>
+<span class="text-sm font-bold">A-12</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pig Entry 3 -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl flex gap-5 hover:bg-white transition-all shadow-sm cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 w-2 h-full bg-secondary-container"></div>
+<div class="w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Young Berkshire pig in a modern barn, high contrast artistic lighting, clean surface textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDggZrhLIeluYRqNFkl02dqWjBd9AM_-BdZWOJHdl4g4sTGYklt7q8MnsNjJYEXTWkCQ8nJhHQ4GN-YYGkzbtnmuhoHFgMvui2aUX9AWx6bu9qdpgxtG83ZhGwiqDl5n7WtTba0KRfT1IZ4KXn2REkFm5HTb2HtW9UfjidPZhKiyio0giZkj2OGuNDUdz3MrESb5GVrX81Yne_p8PzoxdZoTWRZ8pjgpC_UiiY8M1XH3KlCXTS0cOb8SmQq7_eDWlK85fyUp7ir"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline font-bold mb-1">ID: #BK-1044</p>
+<h3 class="text-lg font-bold text-on-surface">巴克夏 (Berkshire)</h3>
+</div>
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant px-3 py-1 rounded-full text-[10px] font-bold">警示</span>
+</div>
+<div class="flex items-center gap-6 mt-4">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant">天数</span>
+<span class="text-sm font-bold">45 天</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant/20 pl-6">
+<span class="text-xs text-on-surface-variant">体重</span>
+<span class="text-sm font-bold">12.8 kg</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant/20 pl-6">
+<span class="text-xs text-on-surface-variant">栏位</span>
+<span class="text-sm font-bold">N-01</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pig Entry 4 -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl flex gap-5 hover:bg-white transition-all shadow-sm cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 w-2 h-full bg-primary-fixed"></div>
+<div class="w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Large pink commercial pig, profile view, clean environment, bright natural daylighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzL8iKo4aqlN1At-IEgKUjdhnEyb-tf03fnMoDjXG0QpC1ioQRD1JgO1mZ5-vK2FkZoFtQZQ6uxPSiiru_G0JwzpfD9pJHg_oUQK6adnWdU4Hp-5vrGoH9QD0h0qtVE47cnsikCy_cDig-VN0otomJdqsXyUYg91fI9s4AP39zaQt39CsQXC_WylR5bJUxndEYFk3rFYE3iM_qGuMXw_uAGhMQNvqPSG9qMFLUYJB2ag6m08MKvL_8Ir-xvAVEebRvwd8ySoAW"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline font-bold mb-1">ID: #DX-9022</p>
+<h3 class="text-lg font-bold text-on-surface">杜洛克 (Duroc)</h3>
+</div>
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded-full text-[10px] font-bold">健康</span>
+</div>
+<div class="flex items-center gap-6 mt-4">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant">天数</span>
+<span class="text-sm font-bold">88 天</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant/20 pl-6">
+<span class="text-xs text-on-surface-variant">体重</span>
+<span class="text-sm font-bold">44.1 kg</span>
+</div>
+<div class="flex flex-col border-l border-outline-variant/20 pl-6">
+<span class="text-xs text-on-surface-variant">栏位</span>
+<span class="text-sm font-bold">B-04</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Add Button (Floating Action Style) -->
+<button class="fixed bottom-28 right-6 w-14 h-14 rounded-full bg-primary text-white shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-40" style="background: linear-gradient(135deg, #0d631b 0%, #2e7d32 100%)">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-white dark:bg-[#1a1c1c] z-50 rounded-t-3xl border-t border-[#bfcaba]/20 shadow-[0_-8px_24px_rgba(26,28,28,0.06)]">
+<a class="flex flex-col items-center justify-center text-[#1a1c1c]/60 dark:text-[#e2e2e2]/60 px-4 py-2 hover:bg-[#f3f3f3] dark:hover:bg-[#2e2e2e] rounded-2xl transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Public_Sans'] text-[12px] font-medium mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#e2e2e2] dark:bg-[#2e7d32]/20 text-[#0d631b] dark:text-[#a3f69c] rounded-2xl px-4 py-2 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="pets" style="font-variation-settings: 'FILL' 1;">pets</span>
+<span class="font-['Public_Sans'] text-[12px] font-medium mt-1">Herd</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1a1c1c]/60 dark:text-[#e2e2e2]/60 px-4 py-2 hover:bg-[#f3f3f3] dark:hover:bg-[#2e2e2e] rounded-2xl transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-['Public_Sans'] text-[12px] font-medium mt-1">Finance</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1a1c1c]/60 dark:text-[#e2e2e2]/60 px-4 py-2 hover:bg-[#f3f3f3] dark:hover:bg-[#2e2e2e] rounded-2xl transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Public_Sans'] text-[12px] font-medium mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="header">
-      <text class="title">LIST</text>
+      <text class="title">养殖首页</text>
     </view>
     <view class="content">
       <text class="product">产品: 猪猪来财</text>
@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       productName: "猪猪来财",
-      pageName: "list"
+      pageName: "养殖首页"
     };
   },
   onLoad() {

@@ -73,7 +73,11 @@ def extract_json(content: str) -> Dict[str, Any]:
     """从响应中提取JSON"""
     try:
         # 尝试直接解析
-        return json.loads(content)
+        obj = json.loads(content)
+        # 兼容：有的模型直接返回 schemes 数组
+        if isinstance(obj, list):
+            return {"schemes": obj}
+        return obj if isinstance(obj, dict) else {}
     except json.JSONDecodeError:
         pass
     
@@ -194,11 +198,22 @@ def function_design_node(
         
         try:
             result_data = extract_json(result)
-            design_schemes = result_data.get("schemes", [])
+            # 兼容不同字段名
+            design_schemes = (
+                result_data.get("schemes")
+                or result_data.get("design_schemes")
+                or result_data.get("plans")
+                or []
+            )
+            if isinstance(design_schemes, dict):
+                # 有时会包一层
+                design_schemes = design_schemes.get("schemes") or design_schemes.get("items") or []
             
             # 验证方案数量
-            if len(design_schemes) != 3:
-                logger.warning(f"返回的方案数量不是3个，实际返回: {len(design_schemes)}")
+            if not isinstance(design_schemes, list) or len(design_schemes) != 3:
+                actual = len(design_schemes) if isinstance(design_schemes, list) else f"type={type(design_schemes)}"
+                logger.warning(f"返回的方案数量不是3个，实际返回: {actual}，将回退默认方案。")
+                design_schemes = generate_default_schemes(product_name, analysis, RuntimeError("invalid schemes count"))
             
             # 记录每个方案的关键信息
             for scheme in design_schemes:
