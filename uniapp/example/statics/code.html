@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智能记账本 - 统计分析</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error": "#ba1a1a",
+              "surface-container": "#edeeef",
+              "outline-variant": "#c1c6d6",
+              "on-secondary-fixed": "#002108",
+              "secondary-container": "#86f898",
+              "surface-bright": "#f8f9fa",
+              "outline": "#727785",
+              "primary": "#005bbf",
+              "surface-tint": "#005bc0",
+              "primary-fixed-dim": "#adc7ff",
+              "secondary-fixed": "#89fa9b",
+              "on-error-container": "#93000a",
+              "surface-container-low": "#f3f4f5",
+              "primary-fixed": "#d8e2ff",
+              "on-tertiary-fixed-variant": "#930004",
+              "on-surface": "#191c1d",
+              "surface-container-highest": "#e1e3e4",
+              "inverse-primary": "#adc7ff",
+              "tertiary-fixed-dim": "#ffb4a9",
+              "primary-container": "#1a73e8",
+              "on-error": "#ffffff",
+              "on-secondary": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "surface-container-high": "#e7e8e9",
+              "tertiary": "#b81d17",
+              "tertiary-fixed": "#ffdad5",
+              "on-tertiary-fixed": "#410001",
+              "background": "#f8f9fa",
+              "secondary": "#006e2c",
+              "tertiary-container": "#dc392c",
+              "secondary-fixed-dim": "#6ddd81",
+              "inverse-surface": "#2e3132",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#005320",
+              "on-surface-variant": "#414754",
+              "on-secondary-container": "#00722f",
+              "surface": "#f8f9fa",
+              "on-primary-fixed": "#001a41",
+              "on-primary-container": "#ffffff",
+              "on-background": "#191c1d",
+              "on-primary": "#ffffff",
+              "surface-dim": "#d9dadb",
+              "on-tertiary-container": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f0f1f2",
+              "on-primary-fixed-variant": "#004493",
+              "surface-variant": "#e1e3e4"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .chart-gradient-primary { background: linear-gradient(180deg, rgba(0, 91, 191, 0.1) 0%, rgba(0, 91, 191, 0) 100%); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- Top App Bar -->
+<header class="bg-[#f8f9fa] dark:bg-slate-900 flex items-center justify-between px-6 py-4 w-full sticky top-0 z-40">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#005bbf] dark:text-blue-400 text-2xl" data-icon="account_balance_wallet">account_balance_wallet</span>
+<h1 class="font-['Manrope'] font-bold text-xl tracking-tight text-on-surface">智能记账本</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors p-2 rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors p-2 rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</header>
+<div class="bg-[#f3f4f5] dark:bg-slate-800 h-px w-full"></div>
+<main class="max-w-4xl mx-auto px-6 pt-8 space-y-8">
+<!-- Time Picker Shell -->
+<section class="flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h2 class="text-headline font-bold text-2xl tracking-tight">统计分析</h2>
+<div class="bg-surface-container-low p-1 rounded-xl flex items-center gap-1">
+<button class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors bg-surface-container-lowest text-primary shadow-sm">周</button>
+<button class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors text-on-surface-variant hover:bg-surface-container-high">月</button>
+<button class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors text-on-surface-variant hover:bg-surface-container-high">季</button>
+<button class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors text-on-surface-variant hover:bg-surface-container-high">年</button>
+</div>
+</div>
+<div class="flex items-center justify-center gap-4 text-on-surface-variant">
+<button class="material-symbols-outlined active:scale-90 transition-transform" data-icon="chevron_left">chevron_left</button>
+<span class="font-semibold text-on-surface">2023年 10月30日 - 11月05日</span>
+<button class="material-symbols-outlined active:scale-90 transition-transform" data-icon="chevron_right">chevron_right</button>
+</div>
+</section>
+<!-- Trend Chart Section -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_24px_rgba(25,28,29,0.04)]">
+<div class="flex justify-between items-end mb-8">
+<div>
+<p class="text-label-md text-on-surface-variant mb-1">总支出 (本周)</p>
+<h3 class="text-headline font-extrabold text-3xl text-tertiary">¥3,482.00</h3>
+</div>
+<div class="text-right">
+<p class="text-label-md text-on-surface-variant mb-1">总收入</p>
+<p class="text-headline font-bold text-xl text-secondary">¥12,500.00</p>
+</div>
+</div>
+<!-- Asymmetric Trend Chart Placeholder -->
+<div class="h-48 w-full relative overflow-hidden flex items-end gap-2 px-2">
+<!-- Abstract Trend Line Visualization using SVG -->
+<svg class="absolute inset-0 w-full h-full preserve-3d" preserveaspectratio="none" viewbox="0 0 400 100">
+<path d="M0,80 Q50,75 100,40 T200,50 T300,20 T400,30" fill="none" stroke="#005bbf" stroke-linecap="round" stroke-width="3"></path>
+<path d="M0,80 Q50,75 100,40 T200,50 T300,20 T400,30 L400,100 L0,100 Z" fill="url(#grad1)"></path>
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:rgba(0, 91, 191, 0.15);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:rgba(0, 91, 191, 0);stop-opacity:1"></stop>
+</lineargradient>
+</defs>
+</svg>
+<!-- X-axis Labels -->
+<div class="absolute bottom-0 w-full flex justify-between text-[10px] text-on-surface-variant font-medium px-1">
+<span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span>
+</div>
+</div>
+</section>
+<!-- Category Breakdown Grid -->
+<div class="grid md:grid-cols-2 gap-8">
+<!-- Pie Chart Section -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_24px_rgba(25,28,29,0.04)]">
+<div class="flex items-center justify-between mb-8">
+<h4 class="font-bold text-lg">分类占比</h4>
+<div class="bg-surface-container-low rounded-lg p-0.5 flex">
+<button class="bg-surface-container-lowest px-3 py-1 rounded-md text-xs font-bold text-primary shadow-sm">支出</button>
+<button class="px-3 py-1 rounded-md text-xs font-medium text-on-surface-variant">收入</button>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<!-- Donut Chart -->
+<div class="relative w-32 h-32 flex-shrink-0">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<circle class="stroke-surface-container-high" cx="18" cy="18" fill="none" r="16" stroke-width="4"></circle>
+<circle class="stroke-primary" cx="18" cy="18" fill="none" r="16" stroke-dasharray="45, 100" stroke-dashoffset="25" stroke-linecap="round" stroke-width="4"></circle>
+<circle class="stroke-tertiary" cx="18" cy="18" fill="none" r="16" stroke-dasharray="20, 100" stroke-dashoffset="80" stroke-linecap="round" stroke-width="4"></circle>
+<circle class="stroke-secondary" cx="18" cy="18" fill="none" r="16" stroke-dasharray="15, 100" stroke-dashoffset="100" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider">总计</span>
+<span class="font-bold text-sm">100%</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex-grow space-y-3">
+<div class="flex items-center justify-between group cursor-default">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+<span class="text-sm font-medium">餐饮</span>
+</div>
+<span class="text-sm font-bold">45%</span>
+</div>
+<div class="flex items-center justify-between group cursor-default">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary"></div>
+<span class="text-sm font-medium">交通</span>
+</div>
+<span class="text-sm font-bold">20%</span>
+</div>
+<div class="flex items-center justify-between group cursor-default">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-secondary"></div>
+<span class="text-sm font-medium">购物</span>
+</div>
+<span class="text-sm font-bold">15%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- List Section -->
+<section class="space-y-4">
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between hover:translate-x-1 transition-transform cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-1 h-8 bg-primary rounded-full"></div>
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl" data-icon="restaurant">restaurant</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">餐饮美食</p>
+<p class="text-xs text-on-surface-variant">12 笔交易</p>
+</div>
+</div>
+<p class="font-headline font-bold">¥1,566.90</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between hover:translate-x-1 transition-transform cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-1 h-8 bg-tertiary rounded-full"></div>
+<div class="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-xl" data-icon="directions_car">directions_car</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">交通出行</p>
+<p class="text-xs text-on-surface-variant">8 笔交易</p>
+</div>
+</div>
+<p class="font-headline font-bold">¥696.40</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between hover:translate-x-1 transition-transform cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-1 h-8 bg-secondary rounded-full"></div>
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-xl" data-icon="shopping_bag">shopping_bag</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">休闲购物</p>
+<p class="text-xs text-on-surface-variant">4 笔交易</p>
+</div>
+</div>
+<p class="font-headline font-bold">¥522.30</p>
+</div>
+</section>
+</div>
+<!-- Yearly Summary Bar Chart -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_24px_rgba(25,28,29,0.04)]">
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-bold text-lg">年度收支趋势</h4>
+<div class="flex gap-4">
+<div class="flex items-center gap-1.5">
+<div class="w-2 h-2 rounded-full bg-primary/40"></div>
+<span class="text-[10px] text-on-surface-variant font-medium">收入</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="text-[10px] text-on-surface-variant font-medium">结余</span>
+</div>
+</div>
+</div>
+<div class="h-32 flex items-end justify-between gap-1 px-2">
+<!-- Bar 1 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[40%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[30%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">1月</span>
+</div>
+<!-- Bar 2 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[60%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[45%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">2月</span>
+</div>
+<!-- Bar 3 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[55%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[20%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">3月</span>
+</div>
+<!-- Bar 4 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[80%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[65%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">4月</span>
+</div>
+<!-- Bar 5 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[70%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[50%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">5月</span>
+</div>
+<!-- Bar 6 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[90%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[75%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">6月</span>
+</div>
+<!-- Bar 7 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[85%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[70%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">7月</span>
+</div>
+<!-- Bar 8 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[40%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[25%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">8月</span>
+</div>
+<!-- Bar 9 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[65%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[40%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">9月</span>
+</div>
+<!-- Bar 10 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/10 rounded-t-sm h-[75%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[60%] -mt-4 transition-all group-hover:bg-primary-container"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">10月</span>
+</div>
+<!-- Bar 11 (Active) -->
+<div class="group relative flex flex-col items-center flex-1 gap-1">
+<div class="w-full bg-primary/20 rounded-t-sm h-[85%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[70%] -mt-4 ring-2 ring-primary ring-offset-2"></div>
+<span class="text-[8px] text-primary font-bold mt-2">11月</span>
+</div>
+<!-- Bar 12 -->
+<div class="group relative flex flex-col items-center flex-1 gap-1 opacity-40">
+<div class="w-full bg-surface-container-high rounded-t-sm h-[20%]"></div>
+<span class="text-[8px] text-on-surface-variant font-medium mt-2">12月</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (Only on Mobile) -->
+<div class="fixed bottom-24 right-6 md:hidden z-50">
+<button class="w-14 h-14 bg-primary text-white rounded-2xl shadow-lg shadow-primary/30 flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-[#f3f4f5] dark:border-slate-800 shadow-[0_-4px_24px_rgba(25,28,29,0.06)] z-50 rounded-t-2xl">
+<a class="flex flex-col items-center justify-center text-[#414754] dark:text-slate-400 px-4 py-1 hover:text-[#005bbf] dark:hover:text-blue-300 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#414754] dark:text-slate-400 px-4 py-1 hover:text-[#005bbf] dark:hover:text-blue-300 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">账单</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#005bbf] dark:text-blue-400 bg-[#e7f0ff] dark:bg-blue-900/30 rounded-xl px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">统计</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#414754] dark:text-slate-400 px-4 py-1 hover:text-[#005bbf] dark:hover:text-blue-300 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">我的</span>
+</a>
+</nav>
+</body></html>

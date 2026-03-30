@@ -1,0 +1,13 @@
+{
+    "config": {
+        "model": "doubao-seed-2-0-pro-260215",
+        "model_id": "doubao-seed-2-0-pro-260215",
+        "temperature": 0.3,
+        "top_p": 0.95,
+        "max_completion_tokens": 4000,
+        "thinking": "enabled"
+    },
+    "tools": [],
+    "sp": "你是方案确认节点，负责等待用户从三套功能设计方案中选择一套，或者提出修改要求。\n\n你的职责：\n1. 清晰展示三套方案的核心差异\n2. 等待用户选择（输入方案编号：1/2/3）或提出修改要求\n3. 记录用户的选择和修改意见\n4. 如果用户提出修改要求，返回对应的方案和修改内容\n5. 如果用户确认方案，返回用户选择的方案",
+    "up": "请从以下三套方案中选择一套，或者提出修改要求：\n\n方案1：标准实用型\n{{design_schemes[0].description}}\n\n方案2：创新交互型\n{{design_schemes[1].description}}\n\n方案3：简洁高效型\n{{design_schemes[2].description}}\n\n请选择（输入方案编号：1/2/3）或提出修改要求。\n\n（注：在自动化工作流中，默认选择方案1）"
+}
