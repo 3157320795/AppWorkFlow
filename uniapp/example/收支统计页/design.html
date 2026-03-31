@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pig Statistics &amp; Finance - The Agricultural Archive</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "secondary-container": "#fed7ca",
+                "on-secondary-fixed-variant": "#5b4137",
+                "surface-container-highest": "#e3e2e2",
+                "surface-container-lowest": "#ffffff",
+                "outline": "#72796e",
+                "error": "#ba1a1a",
+                "on-primary": "#ffffff",
+                "surface-container": "#efeded",
+                "background": "#fbf9f9",
+                "on-error-container": "#93000a",
+                "on-tertiary-fixed-variant": "#71314c",
+                "outline-variant": "#c2c9bb",
+                "secondary-fixed-dim": "#e4beb2",
+                "on-tertiary-fixed": "#3b0520",
+                "tertiary-fixed-dim": "#ffb0cc",
+                "tertiary": "#60233e",
+                "surface-container-low": "#f5f3f3",
+                "error-container": "#ffdad6",
+                "on-surface-variant": "#42493e",
+                "primary-container": "#2d5a27",
+                "surface-variant": "#e3e2e2",
+                "inverse-on-surface": "#f2f0f0",
+                "on-secondary-fixed": "#2b160f",
+                "surface-container-high": "#e9e8e7",
+                "primary-fixed": "#bcf0ae",
+                "on-tertiary": "#ffffff",
+                "on-tertiary-container": "#ffaac8",
+                "inverse-surface": "#303031",
+                "on-error": "#ffffff",
+                "on-primary-fixed-variant": "#23501e",
+                "tertiary-container": "#7c3a55",
+                "inverse-primary": "#a1d494",
+                "tertiary-fixed": "#ffd9e4",
+                "on-secondary": "#ffffff",
+                "primary": "#154212",
+                "on-secondary-container": "#795c51",
+                "on-primary-container": "#9dd090",
+                "primary-fixed-dim": "#a1d494",
+                "secondary-fixed": "#ffdbce",
+                "surface-tint": "#3b6934",
+                "surface-bright": "#fbf9f9",
+                "secondary": "#75584d",
+                "surface": "#fbf9f9",
+                "on-primary-fixed": "#002201",
+                "surface-dim": "#dbdad9",
+                "on-background": "#1b1c1c",
+                "on-surface": "#1b1c1c"
+              },
+              fontFamily: {
+                "headline": ["Work Sans"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fbf9f9;
+        }
+        h1, h2, h3 {
+            font-family: 'Work Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-[#fbf9f9] dark:bg-stone-950 flex justify-between items-center px-6 py-4 w-full docked full-width top-0 sticky z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="portrait of a professional modern farmer wearing a denim shirt in a sunlit organic farm setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuUWUwNOF80X8BFE4ozOxtnAhFKGlMMwVLAxvHBXcMKVB96l2zmBHAkjKljFnYMT1o7Xr0vd7B1BiC1SBs2_pr_Q93On51O9gaL_CxiEvOtSeB3hdOb5gcsKBPFq0UxupKaW8hpLBIZVvIe6A05OO5RwPteiK5q6gKPd0k1O2PikyNxeLY-lnIPILUsnv3iiuuldsjvQrldnItjDCGubtXRVDZssH-Tpw1Nc55AJqyZ_vXIIHnyv_ZwV1U84m93Wgm_MmSvVyiuw"/>
+</div>
+<span class="font-['Work_Sans'] font-black text-[#154212] dark:text-[#4ade80] text-xl">The Agricultural Archive</span>
+</div>
+<button class="p-2 hover:bg-[#efeded] dark:hover:bg-stone-800 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[#154212] dark:text-[#4ade80]">notifications</span>
+</button>
+</header>
+<div class="bg-[#efeded] dark:bg-stone-900 h-[1px] w-full"></div>
+<main class="px-6 pt-6 max-w-lg mx-auto">
+<!-- Time Filters -->
+<div class="flex p-1 bg-surface-container-low rounded-full mb-8">
+<button class="flex-1 py-2 text-sm font-semibold rounded-full bg-primary-container text-white shadow-sm">Last 30 Days</button>
+<button class="flex-1 py-2 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors">Last 12 Months</button>
+</div>
+<!-- Profit & Key Metric Hero -->
+<div class="mb-8 relative overflow-hidden bg-primary p-6 rounded-full text-white shadow-xl">
+<div class="absolute top-0 right-0 opacity-10 scale-150 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]">account_balance_wallet</span>
+</div>
+<div class="relative z-10">
+<p class="text-on-primary-container text-sm font-medium mb-1">Net Profit</p>
+<h1 class="text-4xl font-black tracking-tight mb-4">¥17,300</h1>
+<div class="flex items-center gap-4">
+<div class="bg-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+<p class="text-[10px] uppercase tracking-wider text-primary-fixed/80">Feed-to-Meat</p>
+<p class="text-lg font-bold">2.8 <span class="text-xs font-normal">ratio</span></p>
+</div>
+<div class="bg-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+<p class="text-[10px] uppercase tracking-wider text-primary-fixed/80">Efficiency</p>
+<p class="text-lg font-bold">+12%</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Overview Cards -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<!-- Feed Cost -->
+<div class="bg-surface-container-lowest p-5 rounded-full shadow-sm">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm">grass</span>
+</div>
+<span class="text-xs font-semibold text-on-surface-variant">Feed Cost</span>
+</div>
+<p class="text-xl font-bold text-on-surface">¥32,000</p>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-3 overflow-hidden">
+<div class="bg-secondary h-full w-[65%]"></div>
+</div>
+</div>
+<!-- Revenue -->
+<div class="bg-surface-container-lowest p-5 rounded-full shadow-sm">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">payments</span>
+</div>
+<span class="text-xs font-semibold text-on-surface-variant">Revenue</span>
+</div>
+<p class="text-xl font-bold text-primary">¥55,000</p>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-3 overflow-hidden">
+<div class="bg-primary-container h-full w-[85%]"></div>
+</div>
+</div>
+<!-- Veterinary -->
+<div class="bg-surface-container-lowest p-5 rounded-full shadow-sm">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-sm">medical_services</span>
+</div>
+<span class="text-xs font-semibold text-on-surface-variant">Vets/Drugs</span>
+</div>
+<p class="text-xl font-bold text-on-surface">¥4,500</p>
+</div>
+<!-- Utilities -->
+<div class="bg-surface-container-lowest p-5 rounded-full shadow-sm">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">bolt</span>
+</div>
+<span class="text-xs font-semibold text-on-surface-variant">Utilities</span>
+</div>
+<p class="text-xl font-bold text-on-surface">¥1,200</p>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="space-y-6 mb-8">
+<div class="bg-surface-container-low p-6 rounded-full">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Financial Trend</h3>
+<p class="text-xs text-on-surface-variant">Monthly Revenue vs Cost</p>
+</div>
+<span class="text-[10px] font-bold text-primary bg-primary-fixed px-2 py-0.5 rounded-full">LIVE</span>
+</div>
+<!-- Mock Bar Chart -->
+<div class="flex items-end justify-between h-32 gap-2">
+<div class="flex-1 flex flex-col items-center gap-1">
+<div class="w-full bg-secondary/20 rounded-t-lg h-20 relative">
+<div class="absolute bottom-0 w-full bg-secondary rounded-t-lg h-12"></div>
+</div>
+<span class="text-[8px] font-bold text-on-surface-variant uppercase">Apr</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1">
+<div class="w-full bg-primary/20 rounded-t-lg h-24 relative">
+<div class="absolute bottom-0 w-full bg-primary-container rounded-t-lg h-16"></div>
+</div>
+<span class="text-[8px] font-bold text-on-surface-variant uppercase">May</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1">
+<div class="w-full bg-primary/20 rounded-t-lg h-28 relative">
+<div class="absolute bottom-0 w-full bg-primary-container rounded-t-lg h-20"></div>
+</div>
+<span class="text-[8px] font-bold text-on-surface-variant uppercase">Jun</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-1">
+<div class="w-full bg-primary/20 rounded-t-lg h-32 relative">
+<div class="absolute bottom-0 w-full bg-primary-container rounded-t-lg h-24"></div>
+</div>
+<span class="text-[8px] font-bold text-on-surface-variant uppercase">Jul</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-full">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Breeding Cost</h3>
+<p class="text-xs text-on-surface-variant">Average cost per pig</p>
+</div>
+<p class="text-sm font-bold text-secondary">¥320 <span class="text-[10px] font-normal">avg</span></p>
+</div>
+<!-- Mock Line Chart Area -->
+<div class="relative h-24 w-full">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
+<path d="M0 35 Q 20 30, 40 38 T 80 25 T 100 10" fill="none" stroke="#75584d" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<circle cx="100" cy="10" fill="#75584d" r="2"></circle>
+</svg>
+<div class="absolute top-0 right-0 bg-secondary text-white text-[8px] px-1.5 py-0.5 rounded-full">Trending Down</div>
+</div>
+</div>
+</div>
+<!-- Detailed Log -->
+<section>
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-bold text-on-surface">Recent Transactions</h3>
+<button class="text-sm font-semibold text-primary">View All</button>
+</div>
+<div class="space-y-3">
+<!-- Transaction Item -->
+<div class="bg-white p-4 rounded-full flex items-center justify-between shadow-[0px_2px_8px_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-fixed/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined filled-icon">shopping_cart</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Premium Feed Mix</p>
+<p class="text-xs text-on-surface-variant">Aug 14, 2023 • Feed</p>
+</div>
+</div>
+<p class="font-bold text-secondary">-¥8,400</p>
+</div>
+<div class="bg-white p-4 rounded-full flex items-center justify-between shadow-[0px_2px_8px_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined filled-icon">sell</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Herd Sale #A24</p>
+<p class="text-xs text-on-surface-variant">Aug 12, 2023 • Sales</p>
+</div>
+</div>
+<p class="font-bold text-primary">+¥15,000</p>
+</div>
+<div class="bg-white p-4 rounded-full flex items-center justify-between shadow-[0px_2px_8px_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed/30 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined filled-icon">vaccines</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Vaccination Batch</p>
+<p class="text-xs text-on-surface-variant">Aug 10, 2023 • Drugs</p>
+</div>
+</div>
+<p class="font-bold text-secondary">-¥1,200</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fbf9f9]/80 dark:bg-stone-950/80 backdrop-blur-xl z-50 border-t border-[#c2c9bb]/15 shadow-[0px_-12px_24px_rgba(27,28,28,0.06)]">
+<a class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 hover:text-[#154212] dark:hover:text-[#4ade80] active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Inter'] font-medium text-[12px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 hover:text-[#154212] dark:hover:text-[#4ade80] active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Inter'] font-medium text-[12px]">Herd</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#2D5A27] text-white rounded-xl px-4 py-1.5 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined filled-icon">monitoring</span>
+<span class="font-['Inter'] font-medium text-[12px]">Stats</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 hover:text-[#154212] dark:hover:text-[#4ade80] active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Inter'] font-medium text-[12px]">Settings</span>
+</a>
+</nav>
+</body></html>

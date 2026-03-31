@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Agricultural Archive - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700;800;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-container": "#fed7ca",
+              "on-secondary-fixed-variant": "#5b4137",
+              "surface-container-highest": "#e3e2e2",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#72796e",
+              "error": "#ba1a1a",
+              "on-primary": "#ffffff",
+              "surface-container": "#efeded",
+              "background": "#fbf9f9",
+              "on-error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#71314c",
+              "outline-variant": "#c2c9bb",
+              "secondary-fixed-dim": "#e4beb2",
+              "on-tertiary-fixed": "#3b0520",
+              "tertiary-fixed-dim": "#ffb0cc",
+              "tertiary": "#60233e",
+              "surface-container-low": "#f5f3f3",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#42493e",
+              "primary-container": "#2d5a27",
+              "surface-container-high": "#e9e8e7",
+              "primary-fixed": "#bcf0ae",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#ffaac8",
+              "inverse-surface": "#303031",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#23501e",
+              "tertiary-container": "#7c3a55",
+              "inverse-primary": "#a1d494",
+              "tertiary-fixed": "#ffd9e4",
+              "on-secondary": "#ffffff",
+              "primary": "#154212",
+              "on-secondary-container": "#795c51",
+              "on-primary-container": "#9dd090",
+              "primary-fixed-dim": "#a1d494",
+              "secondary-fixed": "#ffdbce",
+              "surface-tint": "#3b6934",
+              "surface-bright": "#fbf9f9",
+              "secondary": "#75584d",
+              "surface": "#fbf9f9",
+              "on-primary-fixed": "#002201",
+              "surface-dim": "#dbdad9",
+              "on-background": "#1b1c1c",
+              "on-surface": "#1b1c1c"
+            },
+            fontFamily: {
+              "headline": ["Work Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased pb-32">
+<header class="bg-[#fbf9f9] dark:bg-stone-950 flex justify-between items-center px-6 py-4 w-full docked full-width top-0 sticky z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden">
+<img alt="Farmer Profile Picture" class="w-full h-full object-cover" data-alt="close-up portrait of a weathered, smiling older farmer wearing a straw hat in a sun-drenched agricultural field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuSn48Jn9PH_QY3ENCL7Cv_nGbQGvIyjgMsv1u96MfbwyXQT57CI_rxHjpqn2JX827E8S9-K2FzctNWAdFwtkpEy6E88JYZdCYXL2RSbDU6ckDgdcvXYgOwNx5W3o3_Rz1tH4yUkyPJkotXm1t3kMtH-PZUH-xPFdDs1qgAQQ2RfkuvPNa9Huimi6RvwcjwI48WBNUylOgJp-KbIDSoeI8NRXvFg-9GdHE_uaYpIuGhcKVia1hG9CbxpNgX-UxOx5QGkxPb1T0hQ"/>
+</div>
+<h1 class="font-['Work_Sans'] font-black text-[#154212] dark:text-[#4ade80] text-xl">The Agricultural Archive</h1>
+</div>
+<button class="text-[#1b1c1c] dark:text-stone-400 hover:bg-[#efeded] dark:hover:bg-stone-800 transition-colors p-2 rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<div class="bg-[#efeded] dark:bg-stone-900 h-[1px] w-full"></div>
+<main class="px-6 py-8 flex flex-col gap-8">
+<section class="flex flex-col gap-6">
+<div class="flex items-end justify-between">
+<div>
+<span class="text-secondary font-semibold text-sm tracking-wider uppercase">Current Status</span>
+<h2 class="font-headline font-bold text-3xl text-primary leading-tight">Herd Overview</h2>
+</div>
+<div class="bg-primary-fixed px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="text-xs font-bold text-on-primary-fixed-variant">Active</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-full shadow-sm flex flex-col gap-1 ring-1 ring-outline-variant/15">
+<span class="text-on-surface-variant text-xs font-medium">Total Herd</span>
+<span class="font-headline font-black text-4xl text-primary">150</span>
+<span class="text-[10px] text-primary/60 font-bold">Heads</span>
+</div>
+<div class="bg-primary p-6 rounded-full shadow-md flex flex-col gap-1 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary to-primary-container opacity-50"></div>
+<div class="relative z-10 flex flex-col">
+<span class="text-on-primary/70 text-xs font-medium">Ready for Sale</span>
+<span class="font-headline font-black text-4xl text-on-primary">25</span>
+<span class="text-[10px] text-on-primary/60 font-bold">Units</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 rounded-full flex flex-col gap-1">
+<span class="text-on-surface-variant text-xs font-medium">Monthly Cost</span>
+<span class="font-headline font-bold text-xl text-tertiary">¥45,000</span>
+<div class="w-full bg-outline-variant/30 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-tertiary h-full w-[60%] rounded-full"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-full flex flex-col gap-1">
+<span class="text-on-surface-variant text-xs font-medium">Proj. Revenue</span>
+<span class="font-headline font-bold text-xl text-primary">¥75,000</span>
+<div class="w-full bg-outline-variant/30 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full w-[85%] rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-4">
+<h3 class="font-headline font-bold text-xl text-on-surface">Functional Shortcuts</h3>
+<div class="grid grid-cols-2 gap-4">
+<button class="bg-surface-container-lowest aspect-square rounded-full p-6 flex flex-col items-center justify-center gap-3 shadow-sm active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full bg-primary-fixed/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">assignment_ind</span>
+</div>
+<span class="font-bold text-sm text-on-surface">生猪建档</span>
+</button>
+<button class="bg-surface-container-lowest aspect-square rounded-full p-6 flex flex-col items-center justify-center gap-3 shadow-sm active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+<span class="font-bold text-sm text-on-surface">饲喂记录</span>
+</button>
+<button class="bg-surface-container-lowest aspect-square rounded-full p-6 flex flex-col items-center justify-center gap-3 shadow-sm active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed/30 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</div>
+<span class="font-bold text-sm text-on-surface">健康登记</span>
+</button>
+<button class="bg-surface-container-lowest aspect-square rounded-full p-6 flex flex-col items-center justify-center gap-3 shadow-sm active:scale-95 transition-transform">
+<div class="w-12 h-12 rounded-full bg-primary-fixed/30 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+</div>
+<span class="font-bold text-sm text-on-surface">出栏登记</span>
+</button>
+</div>
+</section>
+<section class="flex flex-col gap-4">
+<h3 class="font-headline font-bold text-xl text-on-surface">Precision Utilities</h3>
+<div class="flex flex-col gap-4">
+<div class="bg-surface-container-high rounded-full p-5 flex items-center gap-4 active:bg-surface-container-highest transition-colors">
+<div class="w-14 h-14 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-2xl">straighten</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-primary">Weight Estimation Tool</h4>
+<p class="text-xs text-on-surface-variant leading-tight">Visual AI precision tracking for growth analysis.</p>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<div class="bg-surface-container-high rounded-full p-5 flex items-center gap-4 active:bg-surface-container-highest transition-colors">
+<div class="w-14 h-14 bg-tertiary text-on-tertiary rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-2xl">clinical_notes</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-tertiary">Disease Self-check</h4>
+<p class="text-xs text-on-surface-variant leading-tight">Symptom-based diagnostic and protocol guide.</p>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+</section>
+<section class="mt-4">
+<div class="bg-secondary-container rounded-full p-6 flex flex-col gap-2 relative overflow-hidden">
+<div class="absolute right-0 top-0 w-32 h-32 opacity-10 pointer-events-none translate-x-8 -translate-y-8">
+<span class="material-symbols-outlined text-[120px]">agriculture</span>
+</div>
+<h3 class="font-headline font-bold text-lg text-on-secondary-container">Weekly Insights</h3>
+<p class="text-sm text-on-secondary-container/80 max-w-[80%]">The herd weight average increased by 4.2% this week. Feed efficiency is at an optimal peak.</p>
+<button class="mt-2 text-on-secondary-container font-bold text-sm flex items-center gap-1">
+                    View Full Archive <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fbf9f9]/80 dark:bg-stone-950/80 backdrop-blur-xl z-50 border-t border-[#c2c9bb]/15 shadow-[0px_-12px_24px_rgba(27,28,28,0.06)]">
+<a class="flex flex-col items-center justify-center bg-[#2D5A27] text-white rounded-xl px-4 py-1.5 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-['Inter'] font-medium text-[12px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 hover:text-[#154212] dark:hover:text-[#4ade80] active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Inter'] font-medium text-[12px]">Herd</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 hover:text-[#154212] dark:hover:text-[#4ade80] active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-['Inter'] font-medium text-[12px]">Stats</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 hover:text-[#154212] dark:hover:text-[#4ade80] active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] font-medium text-[12px]">Settings</span>
+</a>
+</nav>
+<div class="fixed bottom-24 right-6 z-40">
+<button class="w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</body></html>

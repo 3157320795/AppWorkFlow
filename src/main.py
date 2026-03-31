@@ -68,6 +68,7 @@ else:
 
 # 导入 UniApp 页面生成节点
 from graphs.nodes.uniapp_page_generate_node import uniapp_page_generate_node
+from graphs.nodes.git_branch_switch_node import extract_group_number, convert_to_pinyin
 from graphs.state import UniAppPageGenerateInput
 
 
@@ -1184,10 +1185,9 @@ async def workflow_interactive_handler(
         logger.info(f"[GitBranch] 当前分支: {current_branch}")
         
         # 创建新分支名称
-        group_num = product_group.replace("组", "").replace("g", "").strip() or "7"
-        # 将产品名转换为拼音（简化处理）
-        import re
-        pinyin_name = re.sub(r'[^\w\s]', '', product_name).lower().replace(" ", "")
+        # 使用统一的拼音转换函数
+        group_num = extract_group_number(product_group).replace("g", "")  # 提取数字部分
+        pinyin_name = convert_to_pinyin(product_name)
         if not pinyin_name:
             pinyin_name = "product"
         branch_name = f"g{group_num}/{pinyin_name}"
@@ -1227,11 +1227,14 @@ async def workflow_interactive_handler(
     try:
         yield send_event("node_start", {"node": "uniapp_page_generate", "message": "正在使用多模态大模型生成 UniApp 页面..."})
 
-        # 构造输入状态
+        # 构造输入状态（使用绝对路径，避免 COZE_WORKSPACE_PATH 环境变量问题）
+        example_abs_path = os.path.join(os.getcwd(), "uniapp", "example")
+        pages_abs_path = os.path.join(os.getcwd(), "uniapp", "pages")
+
         page_input = UniAppPageGenerateInput(
             confirmed_scheme=confirmed_scheme,
-            example_base_path="uniapp/example",
-            pages_path="uniapp/pages"
+            example_base_path=example_abs_path,
+            pages_path=pages_abs_path
         )
 
         # 构造 RunnableConfig（包含 LLM 配置路径）
@@ -1565,13 +1568,13 @@ async def _fallback_to_git_and_pages(
     try:
         yield send_event("node_start", {"node": "git_branch_switch", "message": "异常降级：正在切换 Git 分支..."})
         
-        group_num = product_group.replace("组", "").replace("g", "").strip() or "7"
-        import re
-        pinyin_name = re.sub(r'[^\w\s]', '', product_name).lower().replace(" ", "")
+        # 使用统一的拼音转换函数
+        group_num = extract_group_number(product_group).replace("g", "")  # 提取数字部分
+        pinyin_name = convert_to_pinyin(product_name)
         if not pinyin_name:
             pinyin_name = "product"
         branch_name = f"g{group_num}/{pinyin_name}"
-        
+
         result = subprocess.run(["git", "branch", "--list", branch_name], capture_output=True, text=True, cwd=os.getcwd())
         if result.stdout.strip():
             subprocess.run(["git", "checkout", branch_name], cwd=os.getcwd(), check=False)

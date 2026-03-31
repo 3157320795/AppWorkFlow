@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Agricultural Archive - Pig Registry</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700;800;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-container": "#fed7ca",
+              "on-secondary-fixed-variant": "#5b4137",
+              "surface-container-highest": "#e3e2e2",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#72796e",
+              "error": "#ba1a1a",
+              "on-primary": "#ffffff",
+              "surface-container": "#efeded",
+              "background": "#fbf9f9",
+              "on-error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#71314c",
+              "outline-variant": "#c2c9bb",
+              "secondary-fixed-dim": "#e4beb2",
+              "on-tertiary-fixed": "#3b0520",
+              "tertiary-fixed-dim": "#ffb0cc",
+              "tertiary": "#60233e",
+              "surface-container-low": "#f5f3f3",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#42493e",
+              "primary-container": "#2d5a27",
+              "surface-variant": "#e3e2e2",
+              "inverse-on-surface": "#f2f0f0",
+              "on-secondary-fixed": "#2b160f",
+              "surface-container-high": "#e9e8e7",
+              "primary-fixed": "#bcf0ae",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#ffaac8",
+              "inverse-surface": "#303031",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#23501e",
+              "tertiary-container": "#7c3a55",
+              "inverse-primary": "#a1d494",
+              "tertiary-fixed": "#ffd9e4",
+              "on-secondary": "#ffffff",
+              "primary": "#154212",
+              "on-secondary-container": "#795c51",
+              "on-primary-container": "#9dd090",
+              "primary-fixed-dim": "#a1d494",
+              "secondary-fixed": "#ffdbce",
+              "surface-tint": "#3b6934",
+              "surface-bright": "#fbf9f9",
+              "secondary": "#75584d",
+              "surface": "#fbf9f9",
+              "on-primary-fixed": "#002201",
+              "surface-dim": "#dbdad9",
+              "on-background": "#1b1c1c",
+              "on-surface": "#1b1c1c"
+            },
+            fontFamily: {
+              "headline": ["Work Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Work Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-[#fbf9f9] dark:bg-stone-950 flex justify-between items-center px-6 py-4 w-full docked full-width top-0 sticky z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Professional portrait of a modern organic farmer in a natural linen shirt with soft morning sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8zYjga8y-OH7ssvOMm5sFPtkpLHxwHF0BZUZWlfjd1B36avhnj8AbMzIALigQS9UN-hq8yAUBOaLKBRwWDsjAo_cv3JL9zDVqO6B-FbgTb1FrG1x3ncxPcXjjlHEn-fB9BbTU5Ca4R8BJoRdbmIDfA6alwrM5IcoOTJsXEW_PgHcOizGlPMjc6oE-vkdc3exRjtRiK3h5zPce6XfHw3P6vCwvtHnsU4enaixn35jrT6ftL7Vyj_aX8j2UfvzHjU5em27sMcUwqA"/>
+</div>
+<span class="font-['Work_Sans'] font-black text-[#154212] dark:text-[#4ade80] text-xl">The Agricultural Archive</span>
+</div>
+<button class="text-[#154212] dark:text-[#4ade80] active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<div class="bg-[#efeded] dark:bg-stone-900 h-[1px] w-full"></div>
+<!-- Main Content Canvas -->
+<main class="px-6 pt-6 space-y-6">
+<!-- Search & Filter Section -->
+<section class="space-y-4">
+<div class="flex items-center gap-3 bg-surface-container-high rounded-full px-4 py-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body font-medium w-full placeholder:text-on-surface-variant/60" placeholder="Search Pig ID (e.g. #P2023)..." type="text"/>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="tune">tune</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<button class="bg-primary text-on-primary px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors">保育猪</button>
+<button class="bg-surface-container text-on-surface-variant px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap hover:bg-surface-container-highest transition-colors">育肥猪</button>
+<button class="bg-surface-container text-on-surface-variant px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap hover:bg-surface-container-highest transition-colors">后备母猪</button>
+<button class="bg-surface-container text-on-surface-variant px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap hover:bg-surface-container-highest transition-colors">种公猪</button>
+</div>
+</div>
+</section>
+<!-- Stats Overview (Asymmetric Bento Snippet) -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-primary-container text-on-primary-container p-5 rounded-full flex flex-col justify-between aspect-square">
+<span class="material-symbols-outlined self-end" data-icon="rebase_edit">rebase_edit</span>
+<div>
+<h3 class="text-3xl font-black font-headline tracking-tighter">1,284</h3>
+<p class="text-xs font-medium uppercase tracking-widest opacity-80">Total Herd</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-secondary-fixed text-on-secondary-fixed p-4 rounded-full flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<div>
+<p class="text-sm font-bold leading-tight">+12.4%</p>
+<p class="text-[10px] opacity-70">Growth Index</p>
+</div>
+</div>
+<div class="bg-tertiary-container text-on-tertiary-container p-4 rounded-full flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<div>
+<p class="text-sm font-bold leading-tight">4 Pending</p>
+<p class="text-[10px] opacity-70">Health Checks</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Archive List -->
+<div class="space-y-4">
+<div class="flex items-center justify-between px-2">
+<h2 class="text-headline-md font-bold text-primary tracking-tight">Active Registry</h2>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="text-xs font-semibold">Sort by Entry</span>
+<span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- List Item 1 -->
+<div class="bg-surface-container-lowest rounded-full p-2 flex items-center gap-4 active:scale-95 transition-transform">
+<div class="w-20 h-20 rounded-full overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close-up of a clean, healthy Landrace pig in a well-maintained organic farm setting with natural straw bedding" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKbP5Pf24LsUBHGs_243Rye2Xf76LntaMgcfZjeyLm_9kuAXCGFhQ7dc-fCB5P7RAjfBQvrNBk-wRsg_wa8DCVXwDJQ-blgrJ_sAAckB550lflDrYi-bcmQVnQzYvP_M91Y8zPvpNIRZmplRYn7OIlIv7Fh3LfQTDW-a1AfB7rbEMiNTLvwsc6Bk9jsqzjeCeEgh-k_KtO29rMw41Ml9YWiZCKhxQVTBJwZ5ljd0g-eyIbs6VA7BMnmUrEH2DJNpGkxlx3vkIMAA"/>
+</div>
+<div class="flex-1 pr-4">
+<div class="flex justify-between items-start mb-1">
+<span class="text-primary font-black text-lg font-headline">#P2023-015</span>
+<span class="text-[10px] font-bold text-tertiary bg-tertiary-fixed px-2 py-0.5 rounded-full uppercase tracking-tighter">Day 120</span>
+</div>
+<div class="grid grid-cols-2 gap-x-2 text-[11px] font-medium text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span>
+<span>2023-11-12</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="fitness_center">fitness_center</span>
+<span>105.4 kg</span>
+</div>
+</div>
+<div class="mt-2 h-1.5 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="bg-surface-container-lowest rounded-full p-2 flex items-center gap-4 active:scale-95 transition-transform">
+<div class="w-20 h-20 rounded-full overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Young healthy piglets in a nursery environment with bright diffused light and high-quality sustainable farm equipment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc4DVBlTzNSNYmV3fHuo2zXEssF_y8qmq2lisrYADpAjxXcymih3MBj-D9q7t6qa9ywFKa6Z70pAGbXF4WX4Ve0dVGi5JNt_4ElfioAfoTzxQBX10lpTvG9X25THjhHiTHgPU9S42-rNCow4VrxajNpVAPpqup3fVB0Yro_FcdWd-R6gslcQIuVosVyk2m-iA_FOVQcb84ySE9XV12QjXgB2i1VDZ5v4yuE_dKNw16vRd4hTKIR7wYnSvcS7wVcrImvx3W_m5yXA"/>
+</div>
+<div class="flex-1 pr-4">
+<div class="flex justify-between items-start mb-1">
+<span class="text-primary font-black text-lg font-headline">#P2023-018</span>
+<span class="text-[10px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full uppercase tracking-tighter">Day 112</span>
+</div>
+<div class="grid grid-cols-2 gap-x-2 text-[11px] font-medium text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span>
+<span>2023-11-15</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="fitness_center">fitness_center</span>
+<span>98.2 kg</span>
+</div>
+</div>
+<div class="mt-2 h-1.5 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[72%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- List Item 3 -->
+<div class="bg-surface-container-lowest rounded-full p-2 flex items-center gap-4 active:scale-95 transition-transform">
+<div class="w-20 h-20 rounded-full overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Detailed side profile of a Berkshire pig in a sunny outdoor paddock with rich brown soil and green background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTeCs6e2pYE3A7xW_jHbKjbYA8b5EpwvEcy_eU24-Sf30G7EO7Wa8Uy0NWBIf9wAha83LLv6nqKrN-MaEaXZ7TU0Qir2KeUZYXnNXlS0tG85yLTXip6shsTi0GNZcgAU68z1FdkGmnyqOOuPHXVHl4agdRBE2zEPhn11lQnUAd4axnZHQ6qjwitmAJg5CQuowzqo8E5G0BxH1JB8P_TKgWItjs1L0cQNJQPrdF-ysaRuvYLlOmCTcXtefBZxcWhe_Bl9nM2_zzAg"/>
+</div>
+<div class="flex-1 pr-4">
+<div class="flex justify-between items-start mb-1">
+<span class="text-primary font-black text-lg font-headline">#P2023-022</span>
+<span class="text-[10px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full uppercase tracking-tighter">Day 94</span>
+</div>
+<div class="grid grid-cols-2 gap-x-2 text-[11px] font-medium text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span>
+<span>2023-11-28</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="fitness_center">fitness_center</span>
+<span>82.0 kg</span>
+</div>
+</div>
+<div class="mt-2 h-1.5 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[55%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- List Item 4 -->
+<div class="bg-surface-container-lowest rounded-full p-2 flex items-center gap-4 active:scale-95 transition-transform">
+<div class="w-20 h-20 rounded-full overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A robust boar in an ethical farming environment, standing on natural wood chips with soft overcast lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2muSR-qMSek7ua_OeRHE8Uw-qwc11Ns16BVuvk5uUiVR8l_J5UG8cO3fOfBAFAmXXifoCshUIzeI_iG7cdWEfx3oi5KPETU6oF1D1fDveK96ye9JGXRYVKYksRrmZ4YU59geEHAzgZAIn7JL8jkEG8nkohKWMiOAmguuACq0NFBnCChCZi1sSUTZo9f5yYdum7z01pOscBCmaN3yoSJG1q7wOu_F2Bo63vZB8KzX-3cBb3G0S3l1OwZz24qy910X_mxYXR5YiWg"/>
+</div>
+<div class="flex-1 pr-4">
+<div class="flex justify-between items-start mb-1">
+<span class="text-primary font-black text-lg font-headline">#P2023-009</span>
+<span class="text-[10px] font-bold text-tertiary bg-tertiary-fixed px-2 py-0.5 rounded-full uppercase tracking-tighter">Complete</span>
+</div>
+<div class="grid grid-cols-2 gap-x-2 text-[11px] font-medium text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span>
+<span>2023-10-05</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="fitness_center">fitness_center</span>
+<span>124.5 kg</span>
+</div>
+</div>
+<div class="mt-2 h-1.5 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[100%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fbf9f9]/80 dark:bg-stone-950/80 backdrop-blur-xl shadow-[0px_-12px_24px_rgba(27,28,28,0.06)] border-t border-[#c2c9bb]/15 z-50">
+<div class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Inter'] font-medium text-[12px]">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#2D5A27] text-white rounded-xl px-4 py-1.5 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="grid_view" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-['Inter'] font-medium text-[12px]">Herd</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-['Inter'] font-medium text-[12px]">Stats</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1b1c1c] dark:text-stone-400 px-4 py-1.5 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] font-medium text-[12px]">Settings</span>
+</div>
+</nav>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed right-6 bottom-28 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full shadow-lg flex items-center justify-center active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+</body></html>

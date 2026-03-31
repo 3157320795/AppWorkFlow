@@ -49,9 +49,18 @@ def uniapp_page_generate_node(
     pages_path = state.pages_path
 
     # 获取工作目录并构建绝对路径
+    # 如果传入的是绝对路径则直接使用，否则基于 COZE_WORKSPACE_PATH 构建
     workspace_path = os.getenv("COZE_WORKSPACE_PATH", "/workspace/projects")
-    example_path = os.path.join(workspace_path, example_base_path)
-    pages_abs_path = os.path.join(workspace_path, pages_path)
+
+    if os.path.isabs(example_base_path):
+        example_path = example_base_path
+    else:
+        example_path = os.path.join(workspace_path, example_base_path)
+
+    if os.path.isabs(pages_path):
+        pages_abs_path = pages_path
+    else:
+        pages_abs_path = os.path.join(workspace_path, pages_path)
 
     logger.info(f"[页面生成] 开始生成UniApp页面")
     logger.info(f"[页面生成] 示例目录: {example_path}")
@@ -82,14 +91,25 @@ def uniapp_page_generate_node(
         for page_dir in page_dirs:
             page_name = page_dir.name
             screen_file = page_dir / "screen.png"
+            # 支持 code.html 或 design.html
             html_file = page_dir / "code.html"
+            if not html_file.exists():
+                html_file = page_dir / "design.html"
 
             # 检查文件是否存在
-            if not screen_file.exists() or not html_file.exists():
-                logger.warning(f"[页面生成] 页面 {page_name} 缺少必要文件，跳过")
+            if not screen_file.exists():
+                logger.warning(f"[页面生成] 页面 {page_name} 缺少截图文件，跳过")
+                continue
+            if not html_file.exists():
+                logger.warning(f"[页面生成] 页面 {page_name} 缺少HTML文件，跳过")
                 continue
 
-            logger.info(f"[页面生成] 正在处理页面: {page_name}")
+            # 确定输出文件路径
+            vue_file_path = os.path.join(pages_abs_path, f"{page_name}.vue")
+            is_update = os.path.exists(vue_file_path)
+            action = "重新设计" if is_update else "新建"
+
+            logger.info(f"[页面生成] 正在处理页面: {page_name} ({action})")
 
             try:
                 # 读取HTML内容作为设计参考
@@ -116,22 +136,27 @@ def uniapp_page_generate_node(
                 vue_code = extract_vue_code(result)
 
                 if vue_code:
-                    # 保存Vue文件
-                    vue_file_path = os.path.join(pages_abs_path, f"{page_name}.vue")
+                    # 保存Vue文件（覆盖或新建）
                     with open(vue_file_path, 'w', encoding='utf-8') as f:
                         f.write(vue_code)
 
                     generated_pages.append(vue_file_path)
-                    logger.info(f"[页面生成] 成功生成页面: {vue_file_path}")
+                    action_text = "重新设计完成" if is_update else "新建完成"
+                    logger.info(f"[页面生成] 页面 {page_name} {action_text}: {vue_file_path}")
                 else:
-                    logger.warning(f"[页面生成] 页面 {page_name} 的vue_code为空，跳过")
+                    logger.warning(f"[页面生成] 页面 {page_name} 的大模型返回结果为空，跳过")
 
             except Exception as e:
                 logger.error(f"[页面生成] 生成页面 {page_name} 失败: {e}", exc_info=True)
                 continue
 
         pages_generated = len(generated_pages) > 0
-        logger.info(f"[页面生成] 完成，成功生成 {len(generated_pages)}/{len(page_dirs)} 个页面")
+        failed_count = len(page_dirs) - len(generated_pages)
+
+        if generated_pages:
+            logger.info(f"[页面生成] 完成！成功生成 {len(generated_pages)} 个页面: {[os.path.basename(p) for p in generated_pages]}")
+        if failed_count > 0:
+            logger.warning(f"[页面生成] 有 {failed_count} 个页面生成失败，请检查日志了解详情")
 
         return UniAppPageGenerateOutput(
             pages_generated=pages_generated,
