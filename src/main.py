@@ -66,6 +66,10 @@ if COZELOOP_DISABLED:
 else:
     from coze_coding_utils.log.loop_trace import init_run_config, init_agent_config
 
+# 导入 UniApp 页面生成节点
+from graphs.nodes.uniapp_page_generate_node import uniapp_page_generate_node
+from graphs.state import UniAppPageGenerateInput
+
 
 # 超时配置常量
 TIMEOUT_SECONDS = 900  # 15分钟
@@ -1217,71 +1221,59 @@ async def workflow_interactive_handler(
         branch_name = current_branch if 'current_branch' in locals() else "main"
     
     # ============================================================================
-    # 节点 8: UniApp 页面生成
+    # 节点 8: UniApp 页面生成（使用多模态大模型）
     # ============================================================================
     generated_pages = []
     try:
-        yield send_event("node_start", {"node": "uniapp_page_generate", "message": "正在生成 UniApp 页面..."})
-        
-        # 发现示例页面
-        example_base_path = os.path.join(os.getcwd(), "uniapp", "example")
-        pages_output_path = os.path.join(os.getcwd(), "uniapp", "pages")
-        
-        if not os.path.exists(example_base_path):
-            os.makedirs(example_base_path, exist_ok=True)
-        os.makedirs(pages_output_path, exist_ok=True)
-        
-        # 获取示例目录列表
-        example_pages = []
-        if os.path.exists(example_base_path):
-            for item in os.listdir(example_base_path):
-                item_path = os.path.join(example_base_path, item)
-                if os.path.isdir(item_path):
-                    example_pages.append(item)
-        
-        if not example_pages:
-            # 创建默认示例
-            example_pages = ["home", "list", "mine", "statics"]
-        
-        logger.info(f"[UniAppGenerate] 发现 {len(example_pages)} 个示例页面: {example_pages}")
-        
-        # 为每个示例页面生成代码
-        for page_name in example_pages:
-            try:
-                # 读取示例页面（如果存在）
-                example_vue_path = os.path.join(example_base_path, page_name, f"{page_name}.vue")
-                if not os.path.exists(example_vue_path):
-                    example_vue_path = os.path.join(example_base_path, f"{page_name}.vue")
-                
-                # 生成页面代码
-                output_vue_path = os.path.join(pages_output_path, f"{page_name}.vue")
-                
-                # 简化实现：复制示例或使用模板
-                if os.path.exists(example_vue_path):
-                    with open(example_vue_path, "r", encoding="utf-8") as f:
-                        content = f.read()
-                    # 添加产品相关注释
-                    content = f"<!-- 产品: {product_name} -->\n<!-- 方案: {confirmed_scheme.get('scheme_name', '默认')} -->\n" + content
-                else:
-                    # 创建默认模板
-                    content = _generate_default_vue_template(page_name, product_name, confirmed_scheme)
-                
-                with open(output_vue_path, "w", encoding="utf-8") as f:
-                    f.write(content)
-                
-                generated_pages.append(output_vue_path)
-                logger.info(f"[UniAppGenerate] 生成页面: {output_vue_path}")
-                
-            except Exception as e:
-                logger.error(f"[UniAppGenerate] 生成页面 {page_name} 失败: {e}")
-        
-        yield send_event("node_end", {
-            "node": "uniapp_page_generate",
-            "pages_count": len(generated_pages),
-            "pages": [os.path.basename(p) for p in generated_pages],
-            "message": f"已生成 {len(generated_pages)} 个 UniApp 页面"
-        })
-        
+        yield send_event("node_start", {"node": "uniapp_page_generate", "message": "正在使用多模态大模型生成 UniApp 页面..."})
+
+        # 构造输入状态
+        page_input = UniAppPageGenerateInput(
+            confirmed_scheme=confirmed_scheme,
+            example_base_path="uniapp/example",
+            pages_path="uniapp/pages"
+        )
+
+        # 构造 RunnableConfig（包含 LLM 配置路径）
+        config = RunnableConfig(
+            metadata={"llm_cfg": "config/uniapp_page_generate_llm_cfg.json"}
+        )
+
+        # 构造 Runtime 包装器
+        class SimpleRuntime:
+            def __init__(self, context):
+                self.context = context
+
+        runtime = SimpleRuntime(ctx)
+
+        logger.info(f"[UniAppGenerate] 调用 uniapp_page_generate_node 生成页面，产品: {product_name}")
+
+        # 调用节点函数生成页面
+        page_output = uniapp_page_generate_node(
+            state=page_input,
+            config=config,
+            runtime=runtime
+        )
+
+        generated_pages = page_output.generated_pages
+
+        if page_output.pages_generated:
+            logger.info(f"[UniAppGenerate] 成功生成 {len(generated_pages)} 个页面")
+            yield send_event("node_end", {
+                "node": "uniapp_page_generate",
+                "pages_count": len(generated_pages),
+                "pages": [os.path.basename(p) for p in generated_pages],
+                "message": f"已使用多模态大模型生成 {len(generated_pages)} 个 UniApp 页面"
+            })
+        else:
+            logger.warning(f"[UniAppGenerate] 页面生成未成功，返回空列表")
+            yield send_event("node_end", {
+                "node": "uniapp_page_generate",
+                "pages_count": 0,
+                "pages": [],
+                "message": "页面生成未成功，请检查示例目录和配置文件"
+            })
+
     except Exception as e:
         logger.error(f"[UniAppGenerate] 失败: {e}", exc_info=True)
         yield send_event("node_error", {"node": "uniapp_page_generate", "error": str(e)})

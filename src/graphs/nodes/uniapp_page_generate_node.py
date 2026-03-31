@@ -31,116 +31,116 @@ def uniapp_page_generate_node(
 ) -> UniAppPageGenerateOutput:
     """
     title: UniApp页面生成
-    desc: 根据example目录下的png和html文件，在pages目录下生成对应的UniApp页面代码
-    integrations: 大语言模型
+    desc: 根据example目录下的png和html文件，使用多模态大模型分析设计并生成对应的UniApp页面代码
+    integrations: 火山方舟多模态大模型
     """
     ctx = runtime.context
-    
+
+    # 读取大模型配置
+    cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH"), config['metadata']['llm_cfg'])
+    with open(cfg_file, 'r') as fd:
+        _cfg = json.load(fd)
+
+    llm_config = _cfg.get("config", {})
+    sp = _cfg.get("sp", "")
+
+    # 确定路径
+    example_base_path = state.example_base_path
+    pages_path = state.pages_path
+
+    # 获取工作目录并构建绝对路径
+    workspace_path = os.getenv("COZE_WORKSPACE_PATH", "/workspace/projects")
+    example_path = os.path.join(workspace_path, example_base_path)
+    pages_abs_path = os.path.join(workspace_path, pages_path)
+
+    logger.info(f"[页面生成] 开始生成UniApp页面")
+    logger.info(f"[页面生成] 示例目录: {example_path}")
+    logger.info(f"[页面生成] 输出目录: {pages_abs_path}")
+
     try:
-        # 读取配置
-        cfg_file = os.path.join(os.getenv("COZE_WORKSPACE_PATH"), config['metadata']['llm_cfg'])
-        with open(cfg_file, 'r') as fd:
-            _cfg = json.load(fd)
-        
-        llm_config = _cfg.get("config", {})
-        sp = _cfg.get("sp", "")
-        
-        # 确定路径
-        example_base_path = state.example_base_path
-        pages_path = state.pages_path
-        
-        # 获取工作目录并构建绝对路径
-        workspace_path = os.getenv("COZE_WORKSPACE_PATH", "/workspace/projects")
-        example_path = os.path.join(workspace_path, example_base_path)
-        pages_abs_path = os.path.join(workspace_path, pages_path)
-        
         # 确保pages目录存在
         if not os.path.exists(pages_abs_path):
             os.makedirs(pages_abs_path, exist_ok=True)
-            logger.info(f"创建pages目录: {pages_abs_path}")
-        
+            logger.info(f"[页面生成] 创建pages目录: {pages_abs_path}")
+
         # 遍历example目录下的所有子目录
         example_dir = Path(example_path)
         if not example_dir.exists():
-            logger.error(f"示例目录不存在: {example_path}")
+            logger.error(f"[页面生成] 示例目录不存在: {example_path}")
             return UniAppPageGenerateOutput(
                 pages_generated=False,
                 generated_pages=[],
                 example_pages_count=0
             )
-        
+
         # 获取所有子目录（每个目录代表一个页面）
         page_dirs = [d for d in example_dir.iterdir() if d.is_dir()]
-        logger.info(f"发现 {len(page_dirs)} 个示例页面目录: {[d.name for d in page_dirs]}")
-        logger.info(f"示例目录路径: {example_path}")
-        logger.info(f"输出目录路径: {pages_abs_path}")
-        
+        logger.info(f"[页面生成] 发现 {len(page_dirs)} 个示例页面目录: {[d.name for d in page_dirs]}")
+
         generated_pages = []
-        
+
         for page_dir in page_dirs:
             page_name = page_dir.name
             screen_file = page_dir / "screen.png"
             html_file = page_dir / "code.html"
-            
+
             # 检查文件是否存在
             if not screen_file.exists() or not html_file.exists():
-                logger.warning(f"页面 {page_name} 缺少必要文件，跳过")
+                logger.warning(f"[页面生成] 页面 {page_name} 缺少必要文件，跳过")
                 continue
-            
-            logger.info(f"正在生成页面: {page_name}")
-            
+
+            logger.info(f"[页面生成] 正在处理页面: {page_name}")
+
             try:
-                # 读取HTML内容
+                # 读取HTML内容作为设计参考
                 with open(html_file, 'r', encoding='utf-8') as f:
                     html_content = f.read()
-                
+
                 # 将图片转换为base64编码
                 screen_url = image_to_base64(str(screen_file))
-                logger.info(f"图片已转换为base64编码，长度: {len(screen_url)}")
-                
-                # 构造提示词模板
-                up_template = _cfg.get("up", "")
-                up_tpl = Template(up_template)
-                
+                logger.info(f"[页面生成] 页面 {page_name} 图片已转换，base64长度: {len(screen_url)}")
+
+                # 使用jinja2模板渲染用户提示词
+                up_tpl = Template(_cfg.get("up", ""))
                 user_prompt = up_tpl.render({
                     "confirmed_scheme": json.dumps(state.confirmed_scheme, ensure_ascii=False, indent=2),
                     "page_name": page_name,
                     "html_content": html_content
                 })
-                
-                # 调用多模态大模型生成页面
-                logger.info(f"正在调用大模型生成 {page_name} 页面...")
+
+                # 调用多模态大模型分析设计并生成页面代码
+                logger.info(f"[页面生成] 调用大模型生成 {page_name} 页面...")
                 result = call_multimodal_model(sp, user_prompt, screen_url, llm_config, ctx)
-                
+
                 # 解析返回结果
                 vue_code = extract_vue_code(result)
-                
+
                 if vue_code:
                     # 保存Vue文件
                     vue_file_path = os.path.join(pages_abs_path, f"{page_name}.vue")
                     with open(vue_file_path, 'w', encoding='utf-8') as f:
                         f.write(vue_code)
-                    
+
                     generated_pages.append(vue_file_path)
-                    logger.info(f"成功生成页面: {vue_file_path}")
+                    logger.info(f"[页面生成] 成功生成页面: {vue_file_path}")
                 else:
-                    logger.warning(f"页面 {page_name} 的vue_code为空，跳过")
-                    
+                    logger.warning(f"[页面生成] 页面 {page_name} 的vue_code为空，跳过")
+
             except Exception as e:
-                logger.error(f"生成页面 {page_name} 失败: {e}", exc_info=True)
+                logger.error(f"[页面生成] 生成页面 {page_name} 失败: {e}", exc_info=True)
                 continue
-        
+
         pages_generated = len(generated_pages) > 0
-        logger.info(f"页面生成完成，成功生成 {len(generated_pages)} 个页面")
-        
+        logger.info(f"[页面生成] 完成，成功生成 {len(generated_pages)}/{len(page_dirs)} 个页面")
+
         return UniAppPageGenerateOutput(
             pages_generated=pages_generated,
             generated_pages=generated_pages,
             example_pages_count=len(page_dirs)
         )
-        
+
     except Exception as e:
-        logger.error(f"UniApp页面生成失败: {e}", exc_info=True)
+        logger.error(f"[页面生成] UniApp页面生成失败: {e}", exc_info=True)
         return UniAppPageGenerateOutput(
             pages_generated=False,
             generated_pages=[],
@@ -182,15 +182,18 @@ def call_multimodal_model(
     ctx: Context,
     max_retries: int = 3
 ) -> str:
-    """调用火山方舟多模态大模型，带重试机制"""
+    """
+    调用火山方舟多模态大模型 (doubao-seed-2-0-pro-260215)
+    使用 coze_coding_dev_sdk 的 LLMClient，带重试机制
+    """
     import time
-    
+
     last_error = None
     for attempt in range(max_retries):
         try:
             # 初始化LLM客户端
             client = LLMClient(ctx=ctx)
-            
+
             # 构造多模态消息
             messages = [
                 SystemMessage(content=system_prompt),
@@ -207,9 +210,9 @@ def call_multimodal_model(
                     }
                 ])
             ]
-            
-            logger.info(f"调用火山方舟多模态模型 (尝试 {attempt + 1}/{max_retries})...")
-            
+
+            logger.info(f"[页面生成] 调用火山方舟多模态模型 (尝试 {attempt + 1}/{max_retries})...")
+
             # 调用模型
             response = client.invoke(
                 messages=messages,
@@ -217,7 +220,7 @@ def call_multimodal_model(
                 temperature=llm_config.get("temperature", 0.5),
                 max_completion_tokens=llm_config.get("max_completion_tokens", 8192)
             )
-            
+
             # 处理响应
             content = response.content
             if isinstance(content, list):
@@ -226,18 +229,18 @@ def call_multimodal_model(
                     if isinstance(item, dict) and item.get("type") == "text":
                         text_parts.append(item.get("text", ""))
                 content = "".join(text_parts)
-            
-            logger.info(f"火山方舟多模态模型调用成功")
+
+            logger.info(f"[页面生成] 火山方舟多模态模型调用成功")
             return content
-            
+
         except Exception as e:
             last_error = e
-            logger.warning(f"调用火山方舟多模态模型失败 (尝试 {attempt + 1}/{max_retries}): {e}")
+            logger.warning(f"[页面生成] 调用火山方舟多模态模型失败 (尝试 {attempt + 1}/{max_retries}): {e}")
             if attempt < max_retries - 1:
                 wait_time = 2 ** attempt  # 指数退避: 1s, 2s, 4s
-                logger.info(f"等待 {wait_time} 秒后重试...")
+                logger.info(f"[页面生成] 等待 {wait_time} 秒后重试...")
                 time.sleep(wait_time)
             else:
-                logger.error(f"调用火山方舟多模态模型最终失败: {e}")
-    
+                logger.error(f"[页面生成] 调用火山方舟多模态模型最终失败: {e}")
+
     raise last_error
